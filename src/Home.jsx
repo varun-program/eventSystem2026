@@ -4,7 +4,7 @@ function Home() {
       <h1 style={styles.college}>V.S.B College Of Enginnering Technical Campus</h1>
       <h2 style={styles.dept}>Department Of Information Technology & AIML</h2>
 
-      <h1 style={styles.event}>StrangerTrix</h1>
+      <h1 style={styles.event}>Not Decide yet</h1>
 
       <p style={styles.tagline}>
         Enter the Upside Down of Talent & Innovation
