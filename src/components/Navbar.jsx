@@ -1,37 +1,29 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function Navbar() {
+  const { pathname } = useLocation();
+
+  const linkClass = (path) =>
+    `relative px-2 py-1 transition ${
+      pathname === path
+        ? "text-red-500"
+        : "text-gray-300 hover:text-red-500"
+    }`;
+
   return (
-    <nav style={styles.nav}>
-      <h2 style={styles.logo}>EVENT FEST</h2>
-      <div>
-        <Link to="/" style={styles.link}>Home</Link>
-        <Link to="/about" style={styles.link}>About</Link>
-        <Link to="/events" style={styles.link}>Events</Link>
-        <Link to="/register" style={styles.link}>Register</Link>
+    <nav className="flex justify-between items-center px-10 py-5 border-b border-red-700">
+      <h1 className="text-red-600 text-2xl tracking-[0.3em] font-bold">
+        EVENT FEST
+      </h1>
+
+      <div className="space-x-8 text-sm tracking-widest">
+        <Link className={linkClass("/")} to="/">Home</Link>
+        <Link className={linkClass("/about")} to="/about">About</Link>
+        <Link className={linkClass("/events")} to="/events">Events</Link>
+        <Link className={linkClass("/register")} to="/register">Register</Link>
       </div>
     </nav>
   );
 }
-
-const styles = {
-  nav: {
-    backgroundColor: "#000",
-    padding: "15px 40px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderBottom: "1px solid red",
-  },
-  logo: {
-    color: "red",
-    letterSpacing: "2px",
-  },
-  link: {
-    color: "white",
-    marginLeft: "20px",
-    textDecoration: "none",
-  },
-};
 
 export default Navbar;
