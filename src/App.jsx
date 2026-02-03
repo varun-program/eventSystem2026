@@ -6,6 +6,8 @@ import Events from "./pages/Events";
 import Register from "./pages/Register";
 import Admin from "./pages/Admin";
 import Navbar from "./components/Navbar";
+import AdminLogin from "./pages/AdminLogin";
+import AdminRegistrations from "./pages/AdminRegistrations";
 
 function App() {
   return (
@@ -20,7 +22,12 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/events" element={<Events />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/admin-registrations" element={<AdminRegistrations />} />
+          
+
+          
 
           {/* 🔴 Fallback Route (VERY IMPORTANT) */}
           <Route

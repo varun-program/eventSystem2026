@@ -28,6 +28,8 @@ function Events() {
             coordinator={event.coordinator}
             staff={event.staff}
             fee={event.fee}
+            type={event.type}
+            qrLink={event.qrLink} // ✅ PASS QR LINK
           />
         ))}
       </div>
