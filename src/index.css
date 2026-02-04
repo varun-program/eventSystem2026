@@ -20,17 +20,17 @@ body {
    STRANGER THINGS CORE THEME
    ========================= */
 
-/* 🔴 Red neon glow */
+/* 🔴 Red neon glow text */
 .glow-text {
   text-shadow:
-    0 0 10px rgba(229, 9, 20, 0.6),
-    0 0 30px rgba(229, 9, 20, 0.9);
+    0 0 8px rgba(229, 9, 20, 0.6),
+    0 0 24px rgba(229, 9, 20, 0.85);
 }
 
 /* 🔥 Flickering Hawkins lights */
 @keyframes flicker {
   0%, 100% { opacity: 1; }
-  40% { opacity: 0.75; }
+  40% { opacity: 0.7; }
   60% { opacity: 0.9; }
 }
 
@@ -39,7 +39,7 @@ body {
 }
 
 /* =========================
-   TRUE GLITCH EFFECT
+   TRUE GLITCH TEXT (NETFLIX-STYLE)
    ========================= */
 
 .glitch-text {
@@ -52,14 +52,14 @@ body {
   content: attr(data-text);
   position: absolute;
   inset: 0;
-  opacity: 0.8;
   pointer-events: none;
+  opacity: 0.85;
 }
 
 .glitch-text::before {
   color: #ff003c;
   transform: translate(2px, -2px);
-  animation: glitchTop 1.5s infinite linear alternate-reverse;
+  animation: glitchTop 1.4s infinite linear alternate-reverse;
 }
 
 .glitch-text::after {
@@ -69,14 +69,14 @@ body {
 }
 
 @keyframes glitchTop {
-  0% { clip-path: inset(0 0 90% 0); }
-  50% { clip-path: inset(10% 0 60% 0); }
+  0%   { clip-path: inset(0 0 90% 0); }
+  50%  { clip-path: inset(12% 0 60% 0); }
   100% { clip-path: inset(0 0 90% 0); }
 }
 
 @keyframes glitchBottom {
-  0% { clip-path: inset(80% 0 0 0); }
-  50% { clip-path: inset(40% 0 30% 0); }
+  0%   { clip-path: inset(80% 0 0 0); }
+  50%  { clip-path: inset(40% 0 30% 0); }
   100% { clip-path: inset(80% 0 0 0); }
 }
 
@@ -87,7 +87,7 @@ body {
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(25px);
+    transform: translateY(22px);
   }
   to {
     opacity: 1;
@@ -104,47 +104,56 @@ body {
    ========================= */
 
 /* 🔴 Red fog ambience */
-.red-fog {
-  background: radial-gradient(
-    circle at center,
-    rgba(229, 9, 20, 0.18),
-    transparent 70%
-  );
-}
-
-/* 📺 CRT Scanlines */
-.scanlines::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(255,255,255,0.04),
-    rgba(255,255,255,0.04) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  pointer-events: none;
-}
-
-/* =========================
-   HERO GLOW
-   ========================= */
-
 .hero-glow {
   background: radial-gradient(
     circle at center,
     rgba(229, 9, 20, 0.22),
-    transparent 75%
+    transparent 72%
   );
 }
 
+/* 📺 CRT Scanlines (single source of truth) */
+.scanlines {
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.035),
+    rgba(255, 255, 255, 0.035) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+  opacity: 0.12;
+}
+
 /* =========================
-   GLOBAL POLISH
+   MOBILE FALLBACK (IMPORTANT)
    ========================= */
 
-/* Smooth cinematic transitions */
-* {
+@media (max-width: 768px) {
+  video {
+    display: none !important;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(
+      circle at center,
+      rgba(229, 9, 20, 0.25),
+      #000 70%
+    );
+    z-index: -10;
+  }
+}
+
+/* =========================
+   GLOBAL POLISH (SAFE)
+   ========================= */
+
+/* Cinematic but controlled transitions */
+a, button, .card, .hoverable {
   transition:
     color 0.3s ease,
     background-color 0.3s ease,

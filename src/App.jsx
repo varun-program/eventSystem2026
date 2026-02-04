@@ -10,27 +10,41 @@ import Navbar from "./components/Navbar";
 import AdminLogin from "./pages/AdminLogin";
 import AdminRegistrations from "./pages/AdminRegistrations";
 import PageLoader from "./components/PageLoader";
+import CinematicBackground from "./components/CinematicBackground";
 
+/* =========================
+   ROUTE WRAPPER
+   ========================= */
 function AppWrapper() {
   const location = useLocation();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
+
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 1500); // ⏱ cinematic delay
+    }, 1200); // 🎬 smooth cinematic timing
 
     return () => clearTimeout(timer);
   }, [location.pathname]);
 
   return (
     <>
+      {/* GLOBAL BACKGROUND (always visible) */}
+      <CinematicBackground />
+
+      {/* CINEMATIC PAGE LOADER */}
       {loading && <PageLoader />}
 
+      {/* NAVBAR (always on top) */}
       <Navbar />
 
-      <div className="pt-24 min-h-screen animate-fadeIn">
+      {/* PAGE CONTENT */}
+      <main
+        key={location.pathname}
+        className="pt-24 min-h-screen relative z-10 animate-fadeIn"
+      >
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
@@ -40,6 +54,7 @@ function AppWrapper() {
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin-registrations" element={<AdminRegistrations />} />
 
+          {/* FALLBACK */}
           <Route
             path="*"
             element={
@@ -49,11 +64,14 @@ function AppWrapper() {
             }
           />
         </Routes>
-      </div>
+      </main>
     </>
   );
 }
 
+/* =========================
+   ROOT
+   ========================= */
 export default function App() {
   return (
     <BrowserRouter>
