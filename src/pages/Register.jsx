@@ -33,13 +33,13 @@ function Register() {
 
   const addMember = () => setMembers([...members, ""]);
 
-  // 🔢 PARTICIPANT COUNT
+  // 👥 PARTICIPANT COUNT
   const participantCount =
     event.type === "team" ? members.length + 1 : 1;
 
   const totalAmount = event.fee * participantCount;
 
-  // 🔗 GOOGLE FORM PREFILL LINK (FIXED)
+  // 🔗 GOOGLE FORM PREFILL LINK
   const googleFormBase =
     "https://docs.google.com/forms/d/e/1FAIpQLSe9UE9pCjojdIvaSMoNOQy407K_tiqa6FFu2_-VUV1N_iFMNg/viewform";
 
@@ -76,51 +76,71 @@ function Register() {
   };
 
   return (
-    <div className="min-h-screen p-10 flex justify-center">
-      <div className="w-full max-w-xl bg-black/80 border border-red-700 rounded-xl p-8">
+    <section className="min-h-screen px-6 py-24 flex justify-center">
+      <div className="
+        w-full max-w-2xl
+        bg-black/80
+        border border-red-700
+        rounded-xl
+        p-10
+        animate-fadeIn
+        shadow-[0_0_40px_rgba(229,9,20,0.35)]
+      ">
 
-        <h1 className="text-red-600 text-3xl mb-2">
-          Register – {event.title}
-        </h1>
+        {/* HEADER */}
+        <div className="text-center mb-10">
+          <h1 className="
+            text-red-600 text-3xl md:text-4xl
+            tracking-[0.25em]
+            glow-text mb-2
+          ">
+            REGISTRATION
+          </h1>
+          <p className="text-gray-400 tracking-widest text-sm">
+            {event.title}
+          </p>
+        </div>
 
-        <p className="text-gray-400 mb-6">
-          Fee per person: ₹{event.fee}
-        </p>
+        {/* FORM */}
+        <div className="space-y-4">
+          <input
+            className="w-full p-3 bg-black border border-red-600 text-white focus:outline-none focus:shadow-[0_0_20px_red]"
+            placeholder="Student Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
 
-        {/* STUDENT INFO */}
-        <input
-          className="w-full p-2 mb-3 bg-black border border-red-600 text-white"
-          placeholder="Student Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+          <input
+            className="w-full p-3 bg-black border border-red-600 text-white focus:outline-none focus:shadow-[0_0_20px_red]"
+            placeholder="College Name"
+            value={college}
+            onChange={(e) => setCollege(e.target.value)}
+          />
 
-        <input
-          className="w-full p-2 mb-3 bg-black border border-red-600 text-white"
-          placeholder="College Name"
-          value={college}
-          onChange={(e) => setCollege(e.target.value)}
-        />
+          <input
+            className="w-full p-3 bg-black border border-red-600 text-white focus:outline-none focus:shadow-[0_0_20px_red]"
+            placeholder="Department"
+            value={department}
+            onChange={(e) => setDepartment(e.target.value)}
+          />
 
-        <input
-          className="w-full p-2 mb-3 bg-black border border-red-600 text-white"
-          placeholder="Department"
-          value={department}
-          onChange={(e) => setDepartment(e.target.value)}
-        />
-
-        <input
-          className="w-full p-2 mb-4 bg-black border border-red-600 text-white"
-          placeholder="Phone Number"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-        />
+          <input
+            className="w-full p-3 bg-black border border-red-600 text-white focus:outline-none focus:shadow-[0_0_20px_red]"
+            placeholder="Phone Number"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+        </div>
 
         {/* TEAM EVENT */}
         {event.type === "team" && (
-          <>
+          <div className="mt-8">
+            <h3 className="text-red-500 tracking-widest mb-4">
+              TEAM DETAILS
+            </h3>
+
             <input
-              className="w-full p-2 mb-3 bg-black border border-red-600 text-white"
+              className="w-full p-3 mb-3 bg-black border border-red-600 text-white"
               placeholder="Team Name"
               value={teamName}
               onChange={(e) => setTeamName(e.target.value)}
@@ -129,8 +149,8 @@ function Register() {
             {members.map((m, i) => (
               <input
                 key={i}
-                className="w-full p-2 mb-2 bg-black border border-red-600 text-white"
-                placeholder={`Member ${i + 2} Name`}
+                className="w-full p-3 mb-2 bg-black border border-red-600 text-white"
+                placeholder={`Member ${i + 1} Name`}
                 onChange={(e) => {
                   const copy = [...members];
                   copy[i] = e.target.value;
@@ -141,65 +161,64 @@ function Register() {
 
             <button
               onClick={addMember}
-              className="text-red-500 mb-4 underline"
+              className="text-red-500 underline text-sm mt-2"
             >
               + Add Team Member
             </button>
-          </>
+          </div>
         )}
 
-        {/* TOTAL AMOUNT */}
-        <p className="text-gray-300 mb-4">
-          Total Payable Amount:
-          <span className="text-red-500 text-lg ml-2">
-            ₹{totalAmount}
-          </span>
-        </p>
+        {/* PAYMENT */}
+        <div className="mt-10 border-t border-red-700 pt-6">
+          <p className="text-gray-300 mb-3">
+            Total Payable Amount:
+            <span className="text-red-500 text-lg ml-2">
+              ₹{totalAmount}
+            </span>
+          </p>
 
-        {/* PAYMENT QR */}
-        <div className="mb-4">
           <a
             href={event.qrLink}
             target="_blank"
             rel="noreferrer"
-            className="text-red-500 underline"
+            className="block text-red-500 underline mb-4"
           >
             Open Payment QR (GPay / Paytm)
           </a>
-        </div>
 
-        {/* SCREENSHOT UPLOAD (FIXED) */}
-        <a
-          href={formLink}
-          target="_blank"
-          rel="noreferrer"
-          className="
-            block text-center mb-6 py-2
-            border border-red-600
-            text-red-500
-            hover:bg-red-600 hover:text-black
-            transition
-          "
-        >
-          Upload Payment Screenshot
-        </a>
+          <a
+            href={formLink}
+            target="_blank"
+            rel="noreferrer"
+            className="
+              block text-center py-3
+              border border-red-600
+              text-red-500 tracking-widest
+              hover:bg-red-600 hover:text-black
+              hover:shadow-[0_0_30px_red]
+              transition
+            "
+          >
+            Upload Payment Screenshot
+          </a>
+        </div>
 
         {/* SUBMIT */}
         <button
           onClick={submitForm}
           className="
-            w-full py-3
+            w-full mt-10 py-4
             border border-red-600
-            text-red-500 tracking-widest
+            text-red-500 tracking-[0.3em]
             hover:bg-red-600 hover:text-black
-            hover:shadow-[0_0_25px_red]
+            hover:shadow-[0_0_40px_red]
             transition
           "
         >
-          Submit Registration (₹{totalAmount})
+          CONFIRM REGISTRATION
         </button>
       </div>
-    </div>
+    </section>
   );
 }
 

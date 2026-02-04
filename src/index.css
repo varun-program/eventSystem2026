@@ -2,45 +2,92 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background: radial-gradient(circle at top,#120000, #000000 70%);
-  color: white;
+/* =========================
+   GLOBAL BASE STYLES
+   ========================= */
+html {
+  scroll-behavior: smooth;
 }
 
+body {
+  background-color: #0a0a0a;
+  color: #e5e5e5;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
 
+/* =========================
+   STRANGER THINGS CORE THEME
+   ========================= */
+
+/* 🔴 Red neon glow */
+.glow-text {
+  text-shadow:
+    0 0 10px rgba(229, 9, 20, 0.6),
+    0 0 30px rgba(229, 9, 20, 0.9);
+}
+
+/* 🔥 Flickering Hawkins lights */
 @keyframes flicker {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
-}
-
-@keyframes glitch {
-  0% { text-shadow: 2px 2px red; }
-  25% { text-shadow: -2px -2px red; }
-  50% { text-shadow: 2px -2px red; }
-  75% { text-shadow: -2px 2px red; }
-  100% { text-shadow: 2px 2px red; }
-}
-
-.glitch {
-  animation: glitch 1s infinite;
+  40% { opacity: 0.75; }
+  60% { opacity: 0.9; }
 }
 
 .flicker {
-  animation: flicker 1.5s infinite;
+  animation: flicker 1.8s infinite;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+/* =========================
+   TRUE GLITCH EFFECT
+   ========================= */
+
+.glitch-text {
+  position: relative;
+  color: #e50914;
 }
 
-.animate-fadeIn {
-  animation: fadeIn 0.6s ease-out;
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  opacity: 0.8;
+  pointer-events: none;
 }
+
+.glitch-text::before {
+  color: #ff003c;
+  transform: translate(2px, -2px);
+  animation: glitchTop 1.5s infinite linear alternate-reverse;
+}
+
+.glitch-text::after {
+  color: #00fff9;
+  transform: translate(-2px, 2px);
+  animation: glitchBottom 2s infinite linear alternate-reverse;
+}
+
+@keyframes glitchTop {
+  0% { clip-path: inset(0 0 90% 0); }
+  50% { clip-path: inset(10% 0 60% 0); }
+  100% { clip-path: inset(0 0 90% 0); }
+}
+
+@keyframes glitchBottom {
+  0% { clip-path: inset(80% 0 0 0); }
+  50% { clip-path: inset(40% 0 30% 0); }
+  100% { clip-path: inset(80% 0 0 0); }
+}
+
+/* =========================
+   CINEMATIC ANIMATIONS
+   ========================= */
+
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(25px);
   }
   to {
     opacity: 1;
@@ -49,8 +96,58 @@ body {
 }
 
 .animate-fadeIn {
-  animation: fadeIn 0.8s ease-out;
+  animation: fadeIn 0.9s ease-out both;
 }
+
+/* =========================
+   ATMOSPHERE EFFECTS
+   ========================= */
+
+/* 🔴 Red fog ambience */
+.red-fog {
+  background: radial-gradient(
+    circle at center,
+    rgba(229, 9, 20, 0.18),
+    transparent 70%
+  );
+}
+
+/* 📺 CRT Scanlines */
+.scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.04),
+    rgba(255,255,255,0.04) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+}
+
+/* =========================
+   HERO GLOW
+   ========================= */
+
 .hero-glow {
-  background: radial-gradient(circle, rgba(255,0,0,0.15), transparent 70%);
+  background: radial-gradient(
+    circle at center,
+    rgba(229, 9, 20, 0.22),
+    transparent 75%
+  );
+}
+
+/* =========================
+   GLOBAL POLISH
+   ========================= */
+
+/* Smooth cinematic transitions */
+* {
+  transition:
+    color 0.3s ease,
+    background-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
 }

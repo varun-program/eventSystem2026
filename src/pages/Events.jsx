@@ -2,37 +2,76 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import { useEffect, useState } from "react";
 import EventCard from "../components/EventCard";
+import Loader from "../components/Loader";
 
 function Events() {
   const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchEvents = async () => {
       const snapshot = await getDocs(collection(db, "events"));
-      setEvents(snapshot.docs.map(doc => doc.data()));
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setEvents(data);
+      setLoading(false);
     };
+
     fetchEvents();
   }, []);
 
-  return (
-    <section className="px-16 py-20">
-      <h1 className="text-5xl text-red-600 mb-16">
-        EVENTS FROM THE UPSIDE DOWN
-      </h1>
+  // 🎬 CINEMATIC LOADER WHILE FETCHING
+  if (loading) {
+    return <Loader />;
+  }
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-        {events.map((event, index) => (
-          <EventCard
-            key={index}
-            title={event.title}
-            coordinator={event.coordinator}
-            staff={event.staff}
-            fee={event.fee}
-            type={event.type}
-            qrLink={event.qrLink} // ✅ PASS QR LINK
-          />
-        ))}
+  return (
+    <section className="min-h-screen px-6 md:px-16 py-24 animate-fadeIn">
+
+      {/* PAGE HEADER */}
+      <div className="text-center mb-20">
+        <h1
+          className="
+            text-4xl md:text-5xl
+            text-red-600
+            tracking-[0.3em]
+            glow-text
+            mb-6
+          "
+        >
+          EVENTS
+        </h1>
+
+        <p className="text-gray-400 tracking-widest text-sm max-w-xl mx-auto">
+          Choose your challenge from the Upside Down
+        </p>
       </div>
+
+      {/* EVENTS GRID */}
+      {events.length > 0 ? (
+        <div
+          className="
+            grid grid-cols-1
+            md:grid-cols-2
+            lg:grid-cols-3
+            gap-12
+            max-w-7xl mx-auto
+          "
+        >
+          {events.map((event) => (
+            <EventCard
+              key={event.id}
+              event={event}
+            />
+          ))}
+        </div>
+      ) : (
+        <p className="text-center text-gray-500">
+          No events have been revealed yet…
+        </p>
+      )}
     </section>
   );
 }
