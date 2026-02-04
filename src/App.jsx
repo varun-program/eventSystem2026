@@ -11,6 +11,8 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminRegistrations from "./pages/AdminRegistrations";
 import PageLoader from "./components/PageLoader";
 import CinematicBackground from "./components/CinematicBackground";
+import Developers from "./pages/Developers";
+
 
 /* =========================
    ROUTE WRAPPER
@@ -49,6 +51,7 @@ function AppWrapper() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/events" element={<Events />} />
+          <Route path="/developers" element={<Developers />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/admin" element={<Admin />} />

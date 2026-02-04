@@ -1,174 +1,193 @@
+import { useState } from "react";
+
 function About() {
-  const organizers = [
+  const [openIndex, setOpenIndex] = useState(null);
+
+  const events = [
     {
-      name: "Sigma Shiva",
-      role: "Overall Coordinator",
-      video: "/organizers/shiva.mp4",
+      event: "Coding Challenge",
+      staff: "Staff A",
+      staffPhone: "9XXXXXXXXX",
+      student: "Student A",
+      studentPhone: "9XXXXXXXXX",
     },
     {
-      name: "VARUN G",
-      role: "Event Portal Developer",
-      video: "/organizers/varun.mp4",
+      event: "Debugging",
+      staff: "Staff B",
+      staffPhone: "9XXXXXXXXX",
+      student: "Student B",
+      studentPhone: "9XXXXXXXXX",
     },
     {
-      name: "Selva",
-      role: "Managing Coordinator",
-      video: "/organizers/selva.mp4",
+      event: "Paper Presentation",
+      staff: "Staff C",
+      staffPhone: "9XXXXXXXXX",
+      student: "Student C",
+      studentPhone: "9XXXXXXXXX",
     },
+    // ➕ add up to 10 events here
   ];
 
   return (
-    <section className="relative min-h-screen px-6 md:px-16 py-24 text-white overflow-hidden animate-fadeIn">
+    <section className="min-h-screen px-6 md:px-16 py-24 text-white animate-fadeIn">
 
-      {/* AMBIENT BACKGROUND */}
-      <div className="absolute inset-0 hero-glow"></div>
-      <div className="absolute inset-0 scanlines"></div>
-
-      {/* HERO SECTION */}
-      <div className="relative text-center mb-32">
+      {/* HERO */}
+      <div className="text-center mb-24">
         <h1
-          className="
-            glitch-text
-            text-5xl md:text-6xl
-            font-bold
-            tracking-[0.4em]
-            mb-6
-          "
+          className="glitch-text text-5xl md:text-6xl tracking-[0.4em]"
           data-text="BLITZMAC'26"
         >
           BLITZMAC&apos;26
         </h1>
 
-        <p className="text-gray-300 tracking-widest">
-          Department of Computer Science & Engineering
+        <p className="mt-6 text-gray-400 tracking-widest">
+          Technical Symposium
         </p>
 
-        <p className="text-gray-500 mt-2 tracking-widest text-sm">
-          VSB College of Engineering
-        </p>
-
-        <p className="mt-10 text-red-400 tracking-[0.35em] text-sm flicker">
+        <p className="mt-4 text-red-400 tracking-[0.3em] flicker text-sm">
           ENTER THE UPSIDE DOWN OF TECHNOLOGY
         </p>
       </div>
 
-      {/* MAIN ORGANIZERS */}
-      <div className="relative mb-36">
-        <h2 className="
-          text-red-500 text-3xl
-          tracking-[0.3em]
-          mb-16 text-center glow-text
-        ">
-          MAIN EVENT ORGANIZERS
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-14 max-w-6xl mx-auto">
-          {organizers.map((org, index) => (
-            <div
-              key={index}
-              className="
-                relative bg-black/80
-                border border-red-700
-                rounded-xl overflow-hidden
-                hover:-translate-y-2
-                hover:shadow-[0_0_50px_red]
-                transition
-              "
-            >
-              {/* VIDEO AS GIF */}
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="
-                  w-full h-60 object-cover
-                  grayscale hover:grayscale-0
-                  transition duration-500
-                "
-              >
-                <source src={org.video} type="video/mp4" />
-              </video>
-
-              {/* INFO */}
-              <div className="p-6 text-center">
-                <h3 className="text-xl text-red-500 tracking-widest">
-                  {org.name}
-                </h3>
-                <p className="text-gray-400 mt-2 text-sm">
-                  {org.role}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* OTHER COORDINATORS */}
-      <div className="relative mb-36">
-        <h2 className="
-          text-red-500 text-3xl
-          tracking-[0.3em]
-          mb-16 text-center glow-text
-        ">
-          EVENT COORDINATORS
-        </h2>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 max-w-6xl mx-auto">
-          {[
-            { name: "Coordinator A", role: "Coding Event" },
-            { name: "Coordinator B", role: "Debugging Event" },
-            { name: "Coordinator C", role: "Gaming Event" },
-            { name: "Coordinator D", role: "Workshop" },
-          ].map((c, i) => (
-            <div
-              key={i}
-              className="
-                bg-black/70
-                border border-red-700
-                rounded-lg p-6 text-center
-                hover:shadow-[0_0_30px_red]
-                hover:-translate-y-1
-                transition
-              "
-            >
-              <div className="
-                w-24 h-24 mx-auto mb-4
-                rounded-full bg-red-600/10
-                flex items-center justify-center
-              ">
-                <span className="text-red-500 text-2xl">👤</span>
-              </div>
-
-              <h4 className="text-red-400 tracking-widest">
-                {c.name}
-              </h4>
-
-              <p className="text-gray-400 text-sm mt-1">
-                {c.role}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* WHY THIS EVENT */}
-      <div className="relative max-w-3xl mx-auto text-center">
-        <h2 className="
-          text-red-500 text-3xl
-          tracking-[0.3em]
-          mb-6 glow-text
-        ">
-          WHY THIS EVENT?
+      {/* ABOUT EVENT */}
+      <div className="max-w-4xl mx-auto text-center mb-32">
+        <h2 className="text-red-500 text-3xl tracking-[0.3em] mb-6 glow-text">
+          ABOUT THE EVENT
         </h2>
 
         <p className="text-gray-400 leading-relaxed tracking-wide">
-          BLITZMAC&apos;26 is crafted to ignite curiosity, creativity, and
-          competitive spirit by blending technology, innovation, and a fully
-          immersive Stranger Things–inspired experience that students will
-          remember long after the event ends.
+          BLITZMAC&apos;26 is a technical symposium organized by the Department
+          of Information Technology & Artificial Intelligence and Machine Learning,
+          VSB College of Engineering. The event blends innovation, competition,
+          and creativity with a cinematic Stranger Things–inspired experience.
         </p>
       </div>
+
+      {/* HOD */}
+      <div className="text-center mb-32">
+        <h2 className="text-red-500 text-3xl tracking-[0.3em] mb-10 glow-text">
+          HEAD OF DEPARTMENT
+        </h2>
+
+        <div className="max-w-sm mx-auto bg-black/80 border border-red-700 rounded-xl p-6 hover:shadow-[0_0_30px_red]">
+          <div className="w-28 h-28 mx-auto mb-4 rounded-full bg-red-600/20"></div>
+          <h3 className="text-red-400 tracking-widest">
+            Dr. S. Rinesh
+          </h3>
+          <p className="text-gray-400 text-sm mt-2">
+            Professor & Head, IT & AIML Department
+          </p>
+        </div>
+      </div>
+
+      {/* MAIN STAFF COORDINATOR */}
+      <div className="text-center mb-32">
+        <h2 className="text-red-500 text-3xl tracking-[0.3em] mb-10 glow-text">
+          MAIN STAFF COORDINATOR
+        </h2>
+
+        <div className="max-w-sm mx-auto bg-black/80 border border-red-700 rounded-xl p-6 hover:shadow-[0_0_30px_red]">
+          <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-red-600/10"></div>
+          <h3 className="text-red-400 tracking-widest">
+            S. Prabhu
+          </h3>
+          <p className="text-gray-400 text-sm mt-1">
+            Overall Event Coordinator
+          </p>
+          <p className="text-gray-500 text-sm mt-2">
+            📞 9600406977
+          </p>
+        </div>
+      </div>
+
+      {/* EVENT COORDINATORS – ACCORDION */}
+      <div className="mb-32">
+        <h2 className="text-red-500 text-3xl tracking-[0.3em] mb-14 text-center glow-text">
+          EVENT COORDINATORS
+        </h2>
+
+        <div className="space-y-6 max-w-5xl mx-auto">
+          {events.map((e, i) => {
+            const isOpen = openIndex === i;
+
+            return (
+              <div
+                key={i}
+                className="bg-black/80 border border-red-700 rounded-xl overflow-hidden"
+              >
+                {/* HEADER */}
+                <button
+                  onClick={() => setOpenIndex(isOpen ? null : i)}
+                  className="
+                    w-full flex justify-between items-center
+                    px-6 py-4
+                    text-left
+                    text-red-400 tracking-widest
+                    hover:bg-red-600/10
+                  "
+                >
+                  <span>{e.event}</span>
+                  <span
+                    className={`transition-transform ${
+                      isOpen ? "rotate-180" : ""
+                    }`}
+                  >
+                    ▼
+                  </span>
+                </button>
+
+                {/* BODY */}
+                {isOpen && (
+                  <div className="px-6 pb-6 animate-fadeIn">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm mt-4">
+                      <div>
+                        <p className="text-gray-400">
+                          Staff Coordinator
+                        </p>
+                        <p className="text-red-400">
+                          {e.staff} – 📞 {e.staffPhone}
+                        </p>
+                      </div>
+
+                      <div>
+                        <p className="text-gray-400">
+                          Student Coordinator
+                        </p>
+                        <p className="text-red-400">
+                          {e.student} – 📞 {e.studentPhone}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* PAYMENT QUERIES */}
+      <div className="mb-20">
+        <h2 className="text-red-500 text-3xl tracking-[0.3em] mb-14 text-center glow-text">
+          PAYMENT QUERIES
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto">
+          {[
+            { name: "Coordinator X", phone: "9876543210" },
+            { name: "Coordinator Y", phone: "9123456789" },
+          ].map((p, i) => (
+            <div
+              key={i}
+              className="bg-black/80 border border-red-700 rounded-xl p-6 text-center hover:shadow-[0_0_25px_red]"
+            >
+              <h4 className="text-red-400 tracking-widest">{p.name}</h4>
+              <p className="text-gray-400 mt-2">📞 {p.phone}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
     </section>
   );
 }

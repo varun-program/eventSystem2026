@@ -40,6 +40,7 @@ function Navbar() {
           <Link className={linkClass("/")} to="/">HOME</Link>
           <Link className={linkClass("/about")} to="/about">ABOUT</Link>
           <Link className={linkClass("/events")} to="/events">EVENTS</Link>
+          <Link className={linkClass("/developers")} to="/developers">DEVELOPERS</Link>
         </div>
       </div>
     </nav>
