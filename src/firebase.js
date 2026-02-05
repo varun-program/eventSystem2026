@@ -16,3 +16,21 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Public read: events
+    match /events/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Public write: registrations
+    match /registrations/{doc} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+  }
+}

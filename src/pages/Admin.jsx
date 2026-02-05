@@ -14,8 +14,9 @@ function Admin() {
   const [type, setType] = useState("solo");
   const [coordinator, setCoordinator] = useState("");
   const [staff, setStaff] = useState("");
-  const [fee, setFee] = useState("");
-  const [prizeAmount, setPrizeAmount] = useState(""); // 🆕
+  const [fee, setFee] = useState("");        // Other colleges
+  const [vsbFee, setVsbFee] = useState("");  // 🆕 VSB students
+  const [prizeAmount, setPrizeAmount] = useState("");
   const [qrLink, setQrLink] = useState("");
 
   // 🔐 Auth check
@@ -51,10 +52,10 @@ function Admin() {
       !coordinator ||
       !staff ||
       !fee ||
-      !prizeAmount ||
+      !vsbFee ||
       !qrLink
     ) {
-      alert("Please fill all fields");
+      alert("Please fill all required fields");
       return;
     }
 
@@ -65,14 +66,16 @@ function Admin() {
       type,
       coordinator,
       staff,
-      fee: Number(fee),
-      prizeAmount: Number(prizeAmount), // 🆕
+      fee: Number(fee),        // Other colleges fee
+      vsbFee: Number(vsbFee),  // 🆕 VSB college fee
+      prizeAmount: prizeAmount ? Number(prizeAmount) : null,
       qrLink,
       createdAt: new Date(),
     });
 
     alert("Event added successfully!");
 
+    // Reset form
     setTitle("");
     setDescription("");
     setCategory("technical");
@@ -80,6 +83,7 @@ function Admin() {
     setCoordinator("");
     setStaff("");
     setFee("");
+    setVsbFee("");
     setPrizeAmount("");
     setQrLink("");
   };
@@ -147,16 +151,25 @@ function Admin() {
         <input
           type="number"
           className="w-full p-2 mb-3 bg-black border border-red-600 text-white"
-          placeholder="Registration Fee (₹)"
+          placeholder="Other Colleges Fee (₹)"
           value={fee}
           onChange={(e) => setFee(e.target.value)}
         />
 
-        {/* 🆕 PRIZE AMOUNT */}
+        {/* 🆕 VSB FEE */}
         <input
           type="number"
           className="w-full p-2 mb-3 bg-black border border-red-600 text-white"
-          placeholder="Prize Amount (₹)"
+          placeholder="VSB College Fee (₹)"
+          value={vsbFee}
+          onChange={(e) => setVsbFee(e.target.value)}
+        />
+
+        {/* OPTIONAL PRIZE */}
+        <input
+          type="number"
+          className="w-full p-2 mb-3 bg-black border border-red-600 text-white"
+          placeholder="Prize Amount (optional)"
           value={prizeAmount}
           onChange={(e) => setPrizeAmount(e.target.value)}
         />

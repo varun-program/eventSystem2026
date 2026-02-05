@@ -9,7 +9,15 @@ function AdminRegistrations() {
   const [registrations, setRegistrations] = useState([]);
   const [dataLoading, setDataLoading] = useState(true);
 
-  // 🔐 Admin auth
+  // 📊 SUMMARY STATS
+  const [stats, setStats] = useState({
+    total: 0,
+    vsb: 0,
+    other: 0,
+    expectedAmount: 0,
+  });
+
+  /* ================= AUTH ================= */
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -18,7 +26,7 @@ function AdminRegistrations() {
     return () => unsub();
   }, []);
 
-  // 📥 Fetch registrations
+  /* ================= FETCH DATA ================= */
   useEffect(() => {
     if (!user) return;
 
@@ -28,27 +36,51 @@ function AdminRegistrations() {
         id: d.id,
         ...d.data(),
       }));
+
       setRegistrations(data);
+      calculateStats(data);
       setDataLoading(false);
     };
 
     fetchData();
   }, [user]);
 
-  // ✅ Update payment status
+  /* ================= CALCULATE STATS ================= */
+  const calculateStats = (data) => {
+    let vsb = 0;
+    let other = 0;
+    let expectedAmount = 0;
+
+    data.forEach((r) => {
+      if (r.isVSBStudent) vsb++;
+      else other++;
+
+      expectedAmount += Number(r.totalAmount || 0);
+    });
+
+    setStats({
+      total: data.length,
+      vsb,
+      other,
+      expectedAmount,
+    });
+  };
+
+  /* ================= UPDATE PAYMENT ================= */
   const updateStatus = async (id, status) => {
     await updateDoc(doc(db, "registrations", id), {
       paymentStatus: status,
     });
 
-    setRegistrations((prev) =>
-      prev.map((r) =>
-        r.id === id ? { ...r, paymentStatus: status } : r
-      )
+    const updated = registrations.map((r) =>
+      r.id === id ? { ...r, paymentStatus: status } : r
     );
+
+    setRegistrations(updated);
+    calculateStats(updated);
   };
 
-  // 📊 EXPORT VERIFIED REGISTRATIONS (WITH TECH + NON-TECH)
+  /* ================= EXPORT CSV ================= */
   const exportToCSV = () => {
     const verified = registrations.filter(
       (r) => r.paymentStatus === "verified"
@@ -67,6 +99,7 @@ function AdminRegistrations() {
       "College",
       "Department",
       "Phone",
+      "Student Type",
       "Participants",
       "Participant Count",
       "Fee Per Person",
@@ -75,9 +108,7 @@ function AdminRegistrations() {
 
     const rows = verified.map((r) => {
       const memberNames = Array.isArray(r.participants)
-        ? r.participants
-            .map((p) => `${p.name} (${p.role})`)
-            .join(" | ")
+        ? r.participants.map((p) => `${p.name} (${p.role})`).join(" | ")
         : "";
 
       return [
@@ -88,6 +119,7 @@ function AdminRegistrations() {
         r.college || "",
         r.department || "",
         r.phone || "",
+        r.isVSBStudent ? "VSB" : "Other",
         memberNames,
         r.participantCount || "",
         r.feePerPerson || "",
@@ -100,43 +132,64 @@ function AdminRegistrations() {
       "\n" +
       rows.map((row) => row.map(String).join(",")).join("\n");
 
-    const blob = new Blob([csvContent], {
-      type: "text/csv;charset=utf-8;",
-    });
-
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "verified_registrations_with_events.csv";
+    link.download = "verified_registrations.csv";
     link.click();
   };
 
-  // ⏳ Guards
-  if (authLoading) {
+  /* ================= GUARDS ================= */
+  if (authLoading)
     return (
       <div className="min-h-screen flex items-center justify-center text-red-500">
         Checking admin access...
       </div>
     );
-  }
 
-  if (!user) {
+  if (!user)
     return (
       <div className="min-h-screen flex items-center justify-center text-red-500">
         Admins only
       </div>
     );
-  }
 
-  if (dataLoading) {
+  if (dataLoading)
     return (
       <div className="min-h-screen flex items-center justify-center text-red-500">
         Loading registrations...
       </div>
     );
-  }
 
   return (
     <div className="min-h-screen p-10">
+
+      {/* ================= SUMMARY ================= */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+        <div className="bg-black/80 border border-red-700 rounded-xl p-4 text-center">
+          <p className="text-gray-400 text-sm">Total</p>
+          <p className="text-red-500 text-2xl">{stats.total}</p>
+        </div>
+
+        <div className="bg-black/80 border border-green-600 rounded-xl p-4 text-center">
+          <p className="text-gray-400 text-sm">VSB Students</p>
+          <p className="text-green-400 text-2xl">{stats.vsb}</p>
+          <p className="text-xs text-gray-500">₹150 / head</p>
+        </div>
+
+        <div className="bg-black/80 border border-yellow-600 rounded-xl p-4 text-center">
+          <p className="text-gray-400 text-sm">Other Colleges</p>
+          <p className="text-yellow-400 text-2xl">{stats.other}</p>
+          <p className="text-xs text-gray-500">₹300 / head</p>
+        </div>
+
+        <div className="bg-black/80 border border-blue-600 rounded-xl p-4 text-center">
+          <p className="text-gray-400 text-sm">Expected Amount</p>
+          <p className="text-blue-400 text-2xl">₹{stats.expectedAmount}</p>
+        </div>
+      </div>
+
+      {/* ================= HEADER ================= */}
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-red-600 text-3xl tracking-widest">
           REGISTRATIONS
@@ -150,50 +203,29 @@ function AdminRegistrations() {
         </button>
       </div>
 
+      {/* ================= LIST ================= */}
       <div className="space-y-6">
         {registrations.map((r) => (
           <div
             key={r.id}
             className="border border-red-600 rounded-xl p-6 bg-black/80"
           >
-            <p><b>Technical Event:</b> {r.technicalEvent || "—"}</p>
-            <p><b>Non-Technical Event:</b> {r.nonTechnicalEvent || "—"}</p>
+            <p><b>Technical Event:</b> {r.technicalEvent}</p>
+            <p><b>Non-Technical Event:</b> {r.nonTechnicalEvent}</p>
             <p><b>Leader:</b> {r.studentName}</p>
-            <p><b>Email:</b> {r.email || "—"}</p>
             <p><b>College:</b> {r.college}</p>
-            <p><b>Phone:</b> {r.phone}</p>
-
-            {/* PARTICIPANTS */}
-            <div className="mt-2">
-              <b>Participants:</b>
-              {Array.isArray(r.participants) ? (
-                <ul className="list-disc ml-6 text-gray-400">
-                  {r.participants.map((p, i) => (
-                    <li key={i}>
-                      {p.name} ({p.role})
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-gray-400 ml-2">Not available</p>
-              )}
-            </div>
-
-            <p className="mt-2">
-              <b>Total Amount:</b> ₹{r.totalAmount}
-            </p>
+            <p><b>Type:</b> {r.isVSBStudent ? "VSB Student" : "Other College"}</p>
+            <p><b>Total Amount:</b> ₹{r.totalAmount}</p>
 
             <p className="mt-2">
               <b>Status:</b>{" "}
-              <span
-                className={
-                  r.paymentStatus === "verified"
-                    ? "text-green-500"
-                    : r.paymentStatus === "rejected"
-                    ? "text-red-500"
-                    : "text-yellow-400"
-                }
-              >
+              <span className={
+                r.paymentStatus === "verified"
+                  ? "text-green-500"
+                  : r.paymentStatus === "rejected"
+                  ? "text-red-500"
+                  : "text-yellow-400"
+              }>
                 {r.paymentStatus}
               </span>
             </p>
