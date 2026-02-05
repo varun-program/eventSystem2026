@@ -1,9 +1,9 @@
 function Developers() {
   const devs = [
     {
-      name: "SIVA KUMAR",
-      role: "Event Lead & System Coordinator",
-      tech: "Event Architecture • Operations",
+      name: "SIVAKUMAR S",
+      role: "Backend Developer",
+      tech: "firebase • database • auth",
       video: "/organizers/shiva.mp4",
     },
     {
@@ -13,11 +13,17 @@ function Developers() {
       video: "/organizers/varun.mp4", 
     },
     {
-      name: "YOGHESH",
-      role: "Management & Coordination",
-      tech: "Event Flow • Team Handling",
+      name: "YOGHESH S",
+      role: "UI Designer ",
+      tech: "UI/UX Design • Figma ",
       video: "/organizers/selva.mp4",
     },
+    {
+      name: "Raghul S",
+      role: "Video Editor",
+      tech: "Adobe Premiere Pro • After Effects",
+      video: "/organizers/raghul.mp4",
+    }
   ];
 
   return (

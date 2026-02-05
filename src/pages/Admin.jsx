@@ -9,10 +9,13 @@ function Admin() {
 
   // Event form states
   const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("technical");
   const [type, setType] = useState("solo");
   const [coordinator, setCoordinator] = useState("");
   const [staff, setStaff] = useState("");
   const [fee, setFee] = useState("");
+  const [prizeAmount, setPrizeAmount] = useState(""); // 🆕
   const [qrLink, setQrLink] = useState("");
 
   // 🔐 Auth check
@@ -24,7 +27,6 @@ function Admin() {
     return () => unsub();
   }, []);
 
-  // ⏳ Loading
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center text-red-500">
@@ -33,7 +35,6 @@ function Admin() {
     );
   }
 
-  // 🚫 Not admin
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center text-red-500 text-xl">
@@ -44,41 +45,51 @@ function Admin() {
 
   // ➕ Add event
   const addEvent = async () => {
-    if (!title || !coordinator || !staff || !fee || !qrLink) {
-      alert("Please fill all fields including QR link");
+    if (
+      !title ||
+      !description ||
+      !coordinator ||
+      !staff ||
+      !fee ||
+      !prizeAmount ||
+      !qrLink
+    ) {
+      alert("Please fill all fields");
       return;
     }
 
     await addDoc(collection(db, "events"), {
       title,
+      description,
+      category,
       type,
       coordinator,
       staff,
       fee: Number(fee),
-      qrLink, // ✅ IMPORTANT
+      prizeAmount: Number(prizeAmount), // 🆕
+      qrLink,
       createdAt: new Date(),
     });
 
     alert("Event added successfully!");
 
-    // Reset form
     setTitle("");
+    setDescription("");
+    setCategory("technical");
     setType("solo");
     setCoordinator("");
     setStaff("");
     setFee("");
+    setPrizeAmount("");
     setQrLink("");
   };
 
   return (
     <div className="min-h-screen p-10 flex justify-center">
       <div className="w-full max-w-xl bg-black/80 border border-red-700 rounded-xl p-8">
-        
-        {/* Header */}
+
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-red-600 text-3xl">
-            Admin Panel
-          </h1>
+          <h1 className="text-red-600 text-3xl">Admin Panel</h1>
           <button
             onClick={() => signOut(auth)}
             className="text-red-400 hover:text-red-600 underline"
@@ -87,7 +98,6 @@ function Admin() {
           </button>
         </div>
 
-        {/* Event Title */}
         <input
           className="w-full p-2 mb-3 bg-black border border-red-600 text-white"
           placeholder="Event Title"
@@ -95,7 +105,22 @@ function Admin() {
           onChange={(e) => setTitle(e.target.value)}
         />
 
-        {/* Event Type */}
+        <textarea
+          className="w-full p-2 mb-3 bg-black border border-red-600 text-white"
+          placeholder="Event Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+
+        <select
+          className="w-full p-2 mb-3 bg-black border border-red-600 text-white"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option value="technical">Technical Event</option>
+          <option value="non-technical">Non-Technical Event</option>
+        </select>
+
         <select
           className="w-full p-2 mb-3 bg-black border border-red-600 text-white"
           value={type}
@@ -105,50 +130,47 @@ function Admin() {
           <option value="team">Team Event</option>
         </select>
 
-        {/* Coordinator */}
         <input
           className="w-full p-2 mb-3 bg-black border border-red-600 text-white"
-          placeholder="Coordinator Name"
+          placeholder="Student Coordinator"
           value={coordinator}
           onChange={(e) => setCoordinator(e.target.value)}
         />
 
-        {/* Staff */}
         <input
           className="w-full p-2 mb-3 bg-black border border-red-600 text-white"
-          placeholder="Staff In-charge"
+          placeholder="Staff Coordinator"
           value={staff}
           onChange={(e) => setStaff(e.target.value)}
         />
 
-        {/* Fee */}
         <input
           type="number"
           className="w-full p-2 mb-3 bg-black border border-red-600 text-white"
-          placeholder="Fee (₹)"
+          placeholder="Registration Fee (₹)"
           value={fee}
           onChange={(e) => setFee(e.target.value)}
         />
 
-        {/* QR LINK */}
+        {/* 🆕 PRIZE AMOUNT */}
+        <input
+          type="number"
+          className="w-full p-2 mb-3 bg-black border border-red-600 text-white"
+          placeholder="Prize Amount (₹)"
+          value={prizeAmount}
+          onChange={(e) => setPrizeAmount(e.target.value)}
+        />
+
         <input
           className="w-full p-2 mb-6 bg-black border border-red-600 text-white"
-          placeholder="Payment QR Link (Google Drive / UPI link)"
+          placeholder="Payment QR Link"
           value={qrLink}
           onChange={(e) => setQrLink(e.target.value)}
         />
 
-        {/* Submit */}
         <button
           onClick={addEvent}
-          className="
-            w-full py-3
-            border border-red-600
-            text-red-500 tracking-widest
-            hover:bg-red-600 hover:text-black
-            hover:shadow-[0_0_25px_red]
-            transition
-          "
+          className="w-full py-3 border border-red-600 text-red-500 tracking-widest hover:bg-red-600 hover:text-black transition"
         >
           ADD EVENT
         </button>

@@ -5,27 +5,71 @@ function About() {
 
   const events = [
     {
-      event: "Coding Challenge",
-      staff: "Staff A",
-      staffPhone: "9XXXXXXXXX",
-      student: "Student A",
-      studentPhone: "9XXXXXXXXX",
+      event: "Technova Talk",
+      staff: "C.Kaliamuthan",
+      student: "Barani Kumar",
+      studentPhone: "6382140381",
     },
     {
-      event: "Debugging",
-      staff: "Staff B",
-      staffPhone: "9XXXXXXXXX",
-      student: "Student B",
-      studentPhone: "9XXXXXXXXX",
+      event: "Code Relay",
+      staff: "U.L.SIndhu",
+      student: "S.Yoghesh",
+      studentPhone: "6384766889",
     },
     {
-      event: "Paper Presentation",
-      staff: "Staff C",
-      staffPhone: "9XXXXXXXXX",
-      student: "Student C",
-      studentPhone: "9XXXXXXXXX",
+      event: "Future Tech Workshop",
+      staff: "Dickshan",
+      student: "Rohith",
+      studentPhone: "8098286554",
     },
-    // ➕ add up to 10 events here
+     {
+      event: "Webcraft Studio",
+      staff: "G.L.Dayana",
+      student: "Sriharan",
+      studentPhone: "6383739843",
+    },
+     {
+      event: "Jumbled Codes",
+      staff: "S.Arun kumar",
+      student: "Sivakumar",
+      studentPhone: "7871581868",
+    },
+     {
+      event: "Bug Hunt",
+      staff: "Dickshan",
+      student: "Sree Ragav Bala",
+      studentPhone: "6385420887",
+    },
+     {
+      event: "Meme Craft",
+      staff: "V.Asok Kumar",
+      student: "Nagarajan",
+      studentPhone: "9025291590",
+    },
+     {
+      event: "Brain Byte Battle ",
+      staff: "P.Sahaya Suganya Princes",
+      student: "Raghul",
+      studentPhone: "9865735302",
+    },
+     {
+      event: "Twist The Tale",
+      staff: "Prabu",
+      student: "Mukesh",
+      studentPhone: "9940862572",
+    },
+     {
+      event: "The Hidden Gate",
+      staff: "Venkatesh",
+      student: "varun",
+      studentPhone: "7904686595",
+    },
+     {
+      event: "Design X Showcase",
+      staff: "V.Asok Kumar",
+      student: "Nagarajan",
+      studentPhone: "9025291590",
+    },
   ];
 
   return (
@@ -63,44 +107,46 @@ function About() {
         </p>
       </div>
 
-      {/* HOD */}
-      <div className="text-center mb-32">
-        <h2 className="text-red-500 text-3xl tracking-[0.3em] mb-10 glow-text">
-          HEAD OF DEPARTMENT
+      {/* HOD & MAIN STAFF COORDINATOR */}
+      <div className="mb-32">
+        <h2 className="text-red-500 text-3xl tracking-[0.3em] mb-14 text-center glow-text">
+          EVENT LEADERSHIP
         </h2>
 
-        <div className="max-w-sm mx-auto bg-black/80 border border-red-700 rounded-xl p-6 hover:shadow-[0_0_30px_red]">
-          <div className="w-28 h-28 mx-auto mb-4 rounded-full bg-red-600/20"></div>
-          <h3 className="text-red-400 tracking-widest">
-            Dr. S. Rinesh
-          </h3>
-          <p className="text-gray-400 text-sm mt-2">
-            Professor & Head, IT & AIML Department
-          </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto">
+
+          {/* HOD */}
+          <div className="bg-black/80 border border-red-700 rounded-xl p-6 text-center hover:shadow-[0_0_30px_red]">
+            <div className="w-28 h-28 mx-auto mb-4 rounded-full bg-red-600/20"></div>
+            <h3 className="text-red-400 tracking-widest">
+              Dr. S. Rinesh
+            </h3>
+            <p className="text-gray-400 text-sm mt-2">
+              Professor & Head Of Department
+            </p>
+            <p className="text-gray-500 text-sm">
+              IT & AIML Department
+            </p>
+          </div>
+
+          {/* MAIN STAFF COORDINATOR */}
+          <div className="bg-black/80 border border-red-700 rounded-xl p-6 text-center hover:shadow-[0_0_30px_red]">
+            <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-red-600/10"></div>
+            <h3 className="text-red-400 tracking-widest">
+              S. Prabhu
+            </h3>
+            <p className="text-gray-400 text-sm mt-2">
+              Main Staff Coordinator
+            </p>
+            <p className="text-gray-500 text-sm mt-2">
+              📞 9600406977
+            </p>
+          </div>
+
         </div>
       </div>
 
-      {/* MAIN STAFF COORDINATOR */}
-      <div className="text-center mb-32">
-        <h2 className="text-red-500 text-3xl tracking-[0.3em] mb-10 glow-text">
-          MAIN STAFF COORDINATOR
-        </h2>
-
-        <div className="max-w-sm mx-auto bg-black/80 border border-red-700 rounded-xl p-6 hover:shadow-[0_0_30px_red]">
-          <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-red-600/10"></div>
-          <h3 className="text-red-400 tracking-widest">
-            S. Prabhu
-          </h3>
-          <p className="text-gray-400 text-sm mt-1">
-            Overall Event Coordinator
-          </p>
-          <p className="text-gray-500 text-sm mt-2">
-            📞 9600406977
-          </p>
-        </div>
-      </div>
-
-      {/* EVENT COORDINATORS – ACCORDION */}
+      {/* EVENT COORDINATORS */}
       <div className="mb-32">
         <h2 className="text-red-500 text-3xl tracking-[0.3em] mb-14 text-center glow-text">
           EVENT COORDINATORS
@@ -115,44 +161,28 @@ function About() {
                 key={i}
                 className="bg-black/80 border border-red-700 rounded-xl overflow-hidden"
               >
-                {/* HEADER */}
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : i)}
-                  className="
-                    w-full flex justify-between items-center
-                    px-6 py-4
-                    text-left
-                    text-red-400 tracking-widest
-                    hover:bg-red-600/10
-                  "
+                  className="w-full flex justify-between items-center px-6 py-4 text-left text-red-400 tracking-widest hover:bg-red-600/10"
                 >
                   <span>{e.event}</span>
-                  <span
-                    className={`transition-transform ${
-                      isOpen ? "rotate-180" : ""
-                    }`}
-                  >
+                  <span className={`transition-transform ${isOpen ? "rotate-180" : ""}`}>
                     ▼
                   </span>
                 </button>
 
-                {/* BODY */}
                 {isOpen && (
                   <div className="px-6 pb-6 animate-fadeIn">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm mt-4">
                       <div>
-                        <p className="text-gray-400">
-                          Staff Coordinator
-                        </p>
+                        <p className="text-gray-400">Staff Coordinator</p>
                         <p className="text-red-400">
-                          {e.staff} – 📞 {e.staffPhone}
+                          {e.staff}   {e.staffPhone}
                         </p>
                       </div>
 
                       <div>
-                        <p className="text-gray-400">
-                          Student Coordinator
-                        </p>
+                        <p className="text-gray-400">Student Coordinator</p>
                         <p className="text-red-400">
                           {e.student} – 📞 {e.studentPhone}
                         </p>
@@ -174,8 +204,8 @@ function About() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto">
           {[
-            { name: "Coordinator X", phone: "9876543210" },
-            { name: "Coordinator Y", phone: "9123456789" },
+            { name: "Siva Kumar", phone: "+91 7871581868" },
+            { name: "Yoghesh", phone: "+91 6384766889" },
           ].map((p, i) => (
             <div
               key={i}
@@ -186,6 +216,25 @@ function About() {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* DOWNLOAD INVITATION */}
+      <div className="text-center mb-20">
+        <h2 className="text-red-500 text-3xl tracking-[0.3em] mb-10 glow-text">
+          EVENT INVITATION
+        </h2>
+
+        <a
+          href="/BLITZMAC26_INVITATION.pdf"
+          download
+          className="inline-block px-10 py-4 border border-red-600 text-red-400 tracking-widest rounded-full hover:bg-red-600 hover:text-black transition-all duration-300 shadow-[0_0_20px_red]"
+        >
+          ⬇ DOWNLOAD INVITATION PDF
+        </a>
+
+        <p className="text-gray-500 text-sm mt-4">
+          Official Symposium Invitation
+        </p>
       </div>
 
     </section>

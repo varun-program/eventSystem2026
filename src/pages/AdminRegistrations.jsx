@@ -48,7 +48,7 @@ function AdminRegistrations() {
     );
   };
 
-  // 📊 EXPORT VERIFIED REGISTRATIONS
+  // 📊 EXPORT VERIFIED REGISTRATIONS (WITH TECH + NON-TECH)
   const exportToCSV = () => {
     const verified = registrations.filter(
       (r) => r.paymentStatus === "verified"
@@ -60,46 +60,57 @@ function AdminRegistrations() {
     }
 
     const headers = [
-      "Event Name",
-      "Student Name",
+      "Technical Event",
+      "Non-Technical Event",
+      "Leader Name",
+      "Email",
       "College",
       "Department",
       "Phone",
       "Participants",
+      "Participant Count",
       "Fee Per Person",
       "Total Amount",
-      "Payment Status",
     ];
 
-    const rows = verified.map((r) => [
-      r.eventName,
-      r.studentName,
-      r.college,
-      r.department,
-      r.phone,
-      r.participants,
-      r.feePerPerson,
-      r.totalAmount,
-      r.paymentStatus,
-    ]);
+    const rows = verified.map((r) => {
+      const memberNames = Array.isArray(r.participants)
+        ? r.participants
+            .map((p) => `${p.name} (${p.role})`)
+            .join(" | ")
+        : "";
 
-    let csvContent =
+      return [
+        r.technicalEvent || "—",
+        r.nonTechnicalEvent || "—",
+        r.studentName || "",
+        r.email || "",
+        r.college || "",
+        r.department || "",
+        r.phone || "",
+        memberNames,
+        r.participantCount || "",
+        r.feePerPerson || "",
+        r.totalAmount || "",
+      ];
+    });
+
+    const csvContent =
       headers.join(",") +
       "\n" +
-      rows.map((row) => row.join(",")).join("\n");
+      rows.map((row) => row.map(String).join(",")).join("\n");
 
     const blob = new Blob([csvContent], {
       type: "text/csv;charset=utf-8;",
     });
 
-    const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    link.href = url;
-    link.download = "verified_registrations.csv";
+    link.href = URL.createObjectURL(blob);
+    link.download = "verified_registrations_with_events.csv";
     link.click();
   };
 
-  // ⏳ Render guards
+  // ⏳ Guards
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center text-red-500">
@@ -126,40 +137,51 @@ function AdminRegistrations() {
 
   return (
     <div className="min-h-screen p-10">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-red-600 text-3xl">
-          Registrations & Payments
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-red-600 text-3xl tracking-widest">
+          REGISTRATIONS
         </h1>
 
         <button
           onClick={exportToCSV}
-          className="
-            border border-green-500
-            px-4 py-2
-            text-green-500
-            hover:bg-green-500 hover:text-black
-            transition
-          "
+          className="border border-green-500 px-4 py-2 text-green-500 hover:bg-green-500 hover:text-black"
         >
           Download Verified (Excel)
         </button>
       </div>
 
-      {registrations.length === 0 && (
-        <p className="text-gray-400">No registrations yet.</p>
-      )}
-
       <div className="space-y-6">
         {registrations.map((r) => (
           <div
             key={r.id}
-            className="border border-red-600 rounded-lg p-5 bg-black/80"
+            className="border border-red-600 rounded-xl p-6 bg-black/80"
           >
-            <p><b>Event:</b> {r.eventName}</p>
-            <p><b>Student:</b> {r.studentName}</p>
+            <p><b>Technical Event:</b> {r.technicalEvent || "—"}</p>
+            <p><b>Non-Technical Event:</b> {r.nonTechnicalEvent || "—"}</p>
+            <p><b>Leader:</b> {r.studentName}</p>
+            <p><b>Email:</b> {r.email || "—"}</p>
             <p><b>College:</b> {r.college}</p>
             <p><b>Phone:</b> {r.phone}</p>
-            <p><b>Total:</b> ₹{r.totalAmount}</p>
+
+            {/* PARTICIPANTS */}
+            <div className="mt-2">
+              <b>Participants:</b>
+              {Array.isArray(r.participants) ? (
+                <ul className="list-disc ml-6 text-gray-400">
+                  {r.participants.map((p, i) => (
+                    <li key={i}>
+                      {p.name} ({p.role})
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-400 ml-2">Not available</p>
+              )}
+            </div>
+
+            <p className="mt-2">
+              <b>Total Amount:</b> ₹{r.totalAmount}
+            </p>
 
             <p className="mt-2">
               <b>Status:</b>{" "}
