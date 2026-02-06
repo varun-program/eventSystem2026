@@ -42,7 +42,7 @@ function Home() {
           mb-8 md:mb-10
           tracking-wide md:tracking-widest
         ">
-          Department of Information Technology & AIML
+          Department of Information Technology & CSE(Artificial Intelligence And Machine Learning)
         </p>
 
         {/* Event Name */}

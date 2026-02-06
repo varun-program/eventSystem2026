@@ -6,10 +6,10 @@ function About() {
   const events = [
     { event: "Technova Talk", staff: "C.Kaliamuthan", student: "Barani Kumar", studentPhone: "6382140381" },
     { event: "Code Relay", staff: "U.L.Sindhu", student: "S.Yoghesh", studentPhone: "6384766889" },
-    { event: "Future Tech Workshop", staff: "Dickshan", student: "Rohith", studentPhone: "8098286554" },
+    { event: "Future Tech Workshop", staff: "V.Dickson Irudayaraj", student: "Rohith", studentPhone: "8098286554" },
     { event: "Webcraft Studio", staff: "G.L.Dayana", student: "Sriharan", studentPhone: "6383739843" },
     { event: "Jumbled Codes", staff: "S.Arun Kumar", student: "Sivakumar", studentPhone: "7871581868" },
-    { event: "Bug Hunt", staff: "Dickshan", student: "Sree Ragav Bala", studentPhone: "6385420887" },
+    { event: "Bug Hunt", staff: "V.Dickson Irudayaraj", student: "Sree Ragav Bala", studentPhone: "6385420887" },
     { event: "Meme Craft", staff: "V.Asok Kumar", student: "Nagarajan", studentPhone: "9025291590" },
     { event: "Brain Byte Battle", staff: "P.Sahaya Suganya Princes", student: "Raghul", studentPhone: "9865735302" },
     { event: "Twist The Tale", staff: "Prabu", student: "Mukesh", studentPhone: "9940862572" },
