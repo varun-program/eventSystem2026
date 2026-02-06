@@ -8,7 +8,7 @@ function CinematicBackground() {
     const enableAudio = () => {
       if (videoRef.current && !audioEnabled) {
         videoRef.current.muted = false;     // 🔊 unmute video
-        videoRef.current.volume = 0.25;     // 🎧 soft cinematic volume
+        videoRef.current.volume = 6.25;     // 🎧 soft cinematic volume
         setAudioEnabled(true);
       }
     };

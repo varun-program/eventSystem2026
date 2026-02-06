@@ -14,7 +14,7 @@ function About() {
     { event: "Brain Byte Battle", staff: "P.Sahaya Suganya Princes", student: "Raghul", studentPhone: "9865735302" },
     { event: "Twist The Tale", staff: "Prabu", student: "Mukesh", studentPhone: "9940862572" },
     { event: "The Hidden Gate", staff: "Venkatesh", student: "Varun", studentPhone: "7904686595" },
-    { event: "Design X Showcase", staff: "V.Asok Kumar", student: "Nagarajan", studentPhone: "9025291590" },
+    { event: "Design X Showcase", staff: "V.Asok Kumar", student: "Yugachandran", studentPhone: "9003463789" },
   ];
 
   return (

@@ -28,17 +28,12 @@ function Events() {
     };
 
     fetchEvents();
-
-    return () => {
-      mounted = false;
-    };
+    return () => (mounted = false);
   }, []);
 
   if (loading) return <Loader />;
 
-  /* =========================
-     TECHNICAL EVENT CARD
-     ========================= */
+  /* ================= TECHNICAL CARD ================= */
   const TechnicalCard = ({ event }) => {
     const hasPrize =
       typeof event.prizeAmount === "number" && event.prizeAmount > 0;
@@ -46,48 +41,39 @@ function Events() {
     return (
       <div
         className="
-          relative border border-red-700 rounded-xl
-          p-6 bg-black/80
-          transition-all duration-300
-          hover:-translate-y-2
-          hover:shadow-[0_0_40px_red]
+          border border-red-700 rounded-xl
+          p-5 md:p-6
+          bg-black/80
+          transition md:hover:-translate-y-2
+          md:hover:shadow-[0_0_40px_red]
         "
       >
-        <h3 className="text-red-500 tracking-widest mb-3">
+        <h3 className="text-red-500 text-base md:text-lg tracking-wide md:tracking-widest mb-2">
           {event.title}
         </h3>
 
-        <p className="text-gray-400 text-sm mb-4 leading-relaxed">
+        <p className="text-gray-400 text-sm leading-relaxed mb-4">
           {event.description}
         </p>
 
-        {/* PRIZE / WORKSHOP */}
         {hasPrize ? (
-          <p className="text-yellow-400 font-semibold mb-4">
+          <p className="text-yellow-400 font-semibold mb-4 text-sm">
             🏆 Prize Pool: ₹{event.prizeAmount}
           </p>
         ) : (
-          <span
-            className="
-              inline-block mb-4 px-3 py-1
-              text-xs tracking-widest
-              border border-blue-500
-              text-blue-400
-              rounded-full
-            "
-          >
-            WORKSHOP 
+          <span className="inline-block mb-4 px-3 py-1 text-xs tracking-wide border border-blue-500 text-blue-400 rounded-full">
+            WORKSHOP
           </span>
         )}
 
         <button
           onClick={() => navigate("/register", { state: { event } })}
           className="
-            w-full mt-4 py-2
+            w-full py-2.5
             border border-red-600
-            text-red-500 tracking-widest
-            hover:bg-red-600 hover:text-black
-            hover:shadow-[0_0_25px_red]
+            text-red-500 text-sm
+            tracking-wide md:tracking-widest
+            md:hover:bg-red-600 md:hover:text-black
             transition
           "
         >
@@ -97,47 +83,42 @@ function Events() {
     );
   };
 
-  /* =========================
-     NON-TECHNICAL EVENT CARD
-     ========================= */
+  /* ================= NON-TECH CARD (FIXED) ================= */
   const NonTechnicalCard = ({ event }) => (
     <div
       className="
         relative overflow-hidden
         border border-purple-700 rounded-xl
-        bg-black/70 p-6
+        bg-black/70 p-5
         transition-all duration-300
-        hover:-translate-y-2
-        hover:shadow-[0_0_40px_rgba(168,85,247,0.8)]
+        md:hover:-translate-y-2
+        md:hover:shadow-[0_0_35px_rgba(168,85,247,0.7)]
         group
       "
     >
       {/* TOP NEON STRIP */}
       <div
         className="
-          absolute top-0 left-0 w-full h-[3px]
-          bg-gradient-to-r
-          from-purple-500 via-fuchsia-500 to-purple-500
-          opacity-70
-          group-hover:opacity-100
+          absolute top-0 left-0 w-full h-[2px]
+          bg-gradient-to-r from-purple-500 via-fuchsia-500 to-purple-500
+          opacity-70 md:group-hover:opacity-100
           transition
         "
       />
 
       <span
         className="
-          inline-block mb-4 px-4 py-1
-          text-xs tracking-widest
+          inline-block mb-3 px-3 py-1
+          text-xs tracking-wide
           border border-purple-500
-          text-purple-400
-          rounded-full
+          text-purple-400 rounded-full
           bg-purple-600/10
         "
       >
         NON-TECHNICAL
       </span>
 
-      <h3 className="text-purple-400 tracking-widest text-lg mb-3">
+      <h3 className="text-purple-400 text-base md:text-lg tracking-wide md:tracking-widest mb-2">
         {event.title}
       </h3>
 
@@ -148,11 +129,9 @@ function Events() {
       {/* INNER GLOW */}
       <div
         className="
-          absolute inset-0
-          opacity-0
-          group-hover:opacity-100
+          absolute inset-0 pointer-events-none
+          opacity-0 md:group-hover:opacity-100
           transition
-          pointer-events-none
           shadow-[inset_0_0_60px_rgba(168,85,247,0.15)]
         "
       />
@@ -160,56 +139,42 @@ function Events() {
   );
 
   return (
-    <section className="min-h-screen px-6 md:px-16 py-24">
-
+    <section className="min-h-screen px-5 md:px-16 py-20 md:py-24">
       {/* HEADER */}
-      <div className="text-center mb-24">
-        <h1 className="text-4xl md:text-5xl text-red-600 tracking-[0.3em] glow-text mb-6">
+      <div className="text-center mb-16 md:mb-24">
+        <h1 className="text-3xl md:text-5xl text-red-600 tracking-[0.15em] md:tracking-[0.3em] glow-text mb-4">
           EVENTS
         </h1>
-        <p className="text-gray-400 tracking-widest text-sm">
+        <p className="text-gray-400 text-sm tracking-wide">
           Choose your challenge from the Upside Down
         </p>
       </div>
 
-      {/* TECHNICAL EVENTS */}
-      <div className="mb-32">
-        <h2 className="text-red-500 text-3xl tracking-[0.25em] mb-14 text-center">
+      {/* TECHNICAL */}
+      <div className="mb-24 md:mb-32">
+        <h2 className="text-red-500 text-2xl md:text-3xl tracking-wide md:tracking-[0.25em] mb-10 text-center">
           TECHNICAL EVENTS
         </h2>
 
-        {technicalEvents.length === 0 ? (
-          <p className="text-center text-gray-500">
-            No technical events available
-          </p>
-        ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {technicalEvents.map(event => (
-              <TechnicalCard key={event.id} event={event} />
-            ))}
-          </div>
-        )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
+          {technicalEvents.map(event => (
+            <TechnicalCard key={event.id} event={event} />
+          ))}
+        </div>
       </div>
 
-      {/* NON-TECHNICAL EVENTS */}
+      {/* NON-TECH */}
       <div>
-        <h2 className="text-purple-400 text-3xl tracking-[0.25em] mb-14 text-center">
+        <h2 className="text-purple-400 text-2xl md:text-3xl tracking-wide md:tracking-[0.25em] mb-10 text-center">
           NON-TECHNICAL EVENTS
         </h2>
 
-        {nonTechnicalEvents.length === 0 ? (
-          <p className="text-center text-gray-500">
-            No non-technical events available
-          </p>
-        ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
-            {nonTechnicalEvents.map(event => (
-              <NonTechnicalCard key={event.id} event={event} />
-            ))}
-          </div>
-        )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
+          {nonTechnicalEvents.map(event => (
+            <NonTechnicalCard key={event.id} event={event} />
+          ))}
+        </div>
       </div>
-
     </section>
   );
 }

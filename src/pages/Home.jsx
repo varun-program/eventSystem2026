@@ -4,46 +4,56 @@ function Home() {
   const navigate = useNavigate();
 
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center px-6 overflow-hidden">
-
+    <section className="
+      relative
+      min-h-[85vh] md:min-h-[90vh]
+      flex items-center justify-center
+      px-5 md:px-6
+      overflow-hidden
+    ">
       {/* Background glow */}
-      <div className="absolute inset-0 hero-glow"></div>
+      <div className="absolute inset-0 hero-glow opacity-70 md:opacity-100"></div>
 
       {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/50"></div>
+      <div className="absolute inset-0 bg-black/60 md:bg-black/50"></div>
 
-      {/* Centered Container */}
+      {/* CONTENT */}
       <div className="
         relative z-10
-        w-full max-w-4xl
+        w-full max-w-3xl
         text-center
         animate-fadeIn
       ">
-
         {/* College Name */}
         <h2 className="
           text-red-500
-          tracking-[0.35em]
-          text-xs md:text-sm
-          mb-4
+          text-[10px] md:text-sm
+          tracking-[0.2em] md:tracking-[0.35em]
+          mb-3
           glow-text
         ">
           V.S.B COLLEGE OF ENGINEERING TECHNICAL CAMPUS
         </h2>
 
         {/* Department */}
-        <p className="text-gray-400 mb-10 tracking-widest text-sm">
+        <p className="
+          text-gray-400
+          text-xs md:text-sm
+          mb-8 md:mb-10
+          tracking-wide md:tracking-widest
+        ">
           Department of Information Technology & AIML
         </p>
 
         {/* Event Name */}
         <h1 className="
-          text-5xl md:text-7xl
+          text-4xl sm:text-5xl md:text-7xl
           font-bold
           text-red-600
-          mb-6
-          tracking-[0.25em]
-          glow-text glitch
+          mb-5 md:mb-6
+          tracking-[0.15em] md:tracking-[0.25em]
+          glow-text
+          md:glitch
         ">
           BLITZMAC&apos;26
         </h1>
@@ -51,24 +61,28 @@ function Home() {
         {/* Tagline */}
         <p className="
           text-gray-300
-          mb-14
-          max-w-xl
+          text-sm md:text-base
+          mb-10 md:mb-14
+          max-w-md md:max-w-xl
           mx-auto
-          tracking-wide
+          leading-relaxed
         ">
           Enter the Upside Down of Talent & Innovation
         </p>
 
-        {/* CTA Button */}
+        {/* CTA */}
         <button
           onClick={() => navigate("/events")}
           className="
-            px-12 py-4
+            w-full sm:w-auto
+            px-8 md:px-12
+            py-3 md:py-4
             border border-red-600
             text-red-500
-            tracking-[0.3em]
-            hover:bg-red-600 hover:text-black
-            hover:shadow-[0_0_40px_red]
+            text-sm md:text-base
+            tracking-[0.15em] md:tracking-[0.3em]
+            md:hover:bg-red-600 md:hover:text-black
+            md:hover:shadow-[0_0_40px_red]
             transition duration-300
           "
         >
@@ -78,10 +92,9 @@ function Home() {
 
       {/* Bottom fade */}
       <div className="
-        absolute bottom-0 left-0 w-full h-32
+        absolute bottom-0 left-0 w-full h-24 md:h-32
         bg-gradient-to-t from-black to-transparent
       "></div>
-
     </section>
   );
 }

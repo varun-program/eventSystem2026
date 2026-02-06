@@ -10,13 +10,14 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 
-const MAX_TEAM_SIZE = 3;
+const MAX_TEAM_SIZE = 3; // leader + 2 members
 
 function Register() {
   const location = useLocation();
   const navigate = useNavigate();
   const event = location.state?.event;
 
+  // ❌ Safety
   if (!event || event.category !== "technical") {
     return (
       <div className="min-h-screen flex items-center justify-center text-red-500">
@@ -33,23 +34,23 @@ function Register() {
   const [phone, setPhone] = useState("");
 
   /* ================= STUDENT TYPE ================= */
-  const [studentType, setStudentType] = useState(""); // "vsb" | "other"
-
+  const [studentType, setStudentType] = useState(""); // vsb | other
   const isVSBStudent = studentType === "vsb";
   const feePerPerson = isVSBStudent ? 150 : 300;
 
   /* ================= TEAM ================= */
   const [teamName, setTeamName] = useState("");
-  const [members, setMembers] = useState([""]);
+  const [members, setMembers] = useState([]); // only extra members (max 2)
 
-  const validMembers = members.filter(m => m.trim() !== "");
   const participantCount =
-    event.type === "team" ? validMembers.length + 1 : 1;
+    event.type === "team" ? members.length + 1 : 1;
 
-  const canAddMember = participantCount < MAX_TEAM_SIZE;
+  const canAddMember = members.length < 2;
 
   const addMember = () => {
-    if (canAddMember) setMembers([...members, ""]);
+    if (canAddMember) {
+      setMembers([...members, ""]);
+    }
   };
 
   const totalAmount = feePerPerson * participantCount;
@@ -78,12 +79,14 @@ function Register() {
         where("category", "==", "non-technical")
       );
       const snap = await getDocs(q);
-      setNonTechEvents(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      setNonTechEvents(
+        snap.docs.map(d => ({ id: d.id, ...d.data() }))
+      );
     };
     fetchNonTech();
   }, []);
 
-  /* ================= DUPLICATE ================= */
+  /* ================= DUPLICATE CHECK ================= */
   const checkDuplicate = async () => {
     const q = query(
       collection(db, "registrations"),
@@ -109,12 +112,12 @@ function Register() {
     }
 
     if (!selectedNonTech) {
-      alert("Select one Non-Technical event");
+      alert("Please select one Non-Technical event");
       return;
     }
 
     if (participantCount > MAX_TEAM_SIZE) {
-      alert("Maximum team size is 3");
+      alert("Maximum team size is 3 (including leader)");
       return;
     }
 
@@ -144,9 +147,9 @@ function Register() {
 
         participants: [
           { name, role: "Leader" },
-          ...(event.type === "team"
-            ? validMembers.map(m => ({ name: m, role: "Member" }))
-            : []),
+          ...members
+            .filter(m => m.trim() !== "")
+            .map(m => ({ name: m, role: "Member" })),
         ],
 
         participantCount,
@@ -169,42 +172,53 @@ function Register() {
   };
 
   return (
-    <section className="min-h-screen px-6 py-24 flex justify-center">
-      <div className="w-full max-w-2xl bg-black/80 border border-red-700 rounded-xl p-10">
+    <section className="min-h-screen px-4 sm:px-6 py-24 flex justify-center">
+      <div className="w-full max-w-2xl bg-black/80 border border-red-700 rounded-xl p-6 sm:p-10">
 
-        <h1 className="text-red-600 text-3xl tracking-[0.25em] text-center mb-6">
+        <h1 className="text-red-600 text-2xl sm:text-3xl tracking-widest text-center mb-6">
           {event.title}
         </h1>
 
         {/* BASIC */}
         <div className="space-y-4">
-          <input className="w-full p-3 bg-black border border-red-600 text-white" placeholder="Student Name" onChange={e => setName(e.target.value)} />
-          <input className="w-full p-3 bg-black border border-red-600 text-white" placeholder="Email" onChange={e => setEmail(e.target.value)} />
-          <input className="w-full p-3 bg-black border border-red-600 text-white" placeholder="College" onChange={e => setCollege(e.target.value)} />
-          <input className="w-full p-3 bg-black border border-red-600 text-white" placeholder="Department" onChange={e => setDepartment(e.target.value)} />
-          <input className="w-full p-3 bg-black border border-red-600 text-white" placeholder="Phone" onChange={e => setPhone(e.target.value)} />
+          {[
+            ["Student Name", setName],
+            ["Email", setEmail],
+            ["College", setCollege],
+            ["Department", setDepartment],
+            ["Phone", setPhone],
+          ].map(([ph, setter], i) => (
+            <input
+              key={i}
+              className="w-full p-3 rounded-md bg-black border border-red-600 text-white"
+              placeholder={ph}
+              onChange={e => setter(e.target.value)}
+            />
+          ))}
 
-          {/* STUDENT TYPE */}
           <select
-            className="w-full p-3 bg-black border border-red-600 text-white"
+            className="w-full p-3 rounded-md bg-black border border-red-600 text-white"
             value={studentType}
             onChange={e => setStudentType(e.target.value)}
           >
             <option value="">Select Student Type</option>
-            <option value="vsb">VSB College Student (₹150)</option>
-            <option value="other">Other College Student (₹300)</option>
+            <option value="vsb">VSB Student (₹150)</option>
+            <option value="other">Other College (₹300)</option>
           </select>
         </div>
 
         {/* TEAM */}
         {event.type === "team" && (
           <div className="mt-8">
-            <h3 className="text-red-500 tracking-widest mb-2">
-              TEAM DETAILS (Max 3)
+            <h3 className="text-red-500 tracking-widest mb-1">
+              TEAM DETAILS
             </h3>
+            <p className="text-gray-400 text-xs mb-4">
+              Max 3 members (1 leader + 2 members)
+            </p>
 
             <input
-              className="w-full p-3 mb-3 bg-black border border-red-600 text-white"
+              className="w-full p-3 mb-3 rounded-md bg-black border border-red-600 text-white"
               placeholder="Team Name"
               onChange={e => setTeamName(e.target.value)}
             />
@@ -212,7 +226,7 @@ function Register() {
             {members.map((_, i) => (
               <input
                 key={i}
-                className="w-full p-3 mb-2 bg-black border border-red-600 text-white"
+                className="w-full p-3 mb-2 rounded-md bg-black border border-red-600 text-white"
                 placeholder={`Member ${i + 2} Name`}
                 onChange={e => {
                   const copy = [...members];
@@ -223,10 +237,13 @@ function Register() {
             ))}
 
             <button
+              type="button"
               disabled={!canAddMember}
               onClick={addMember}
               className={`text-sm underline ${
-                canAddMember ? "text-red-500" : "text-gray-500"
+                canAddMember
+                  ? "text-red-500"
+                  : "text-gray-500 cursor-not-allowed"
               }`}
             >
               + Add Team Member
@@ -257,15 +274,26 @@ function Register() {
         <div className="mt-10 border-t border-red-700 pt-6">
           <p className="text-gray-300 mb-3">
             ₹{feePerPerson} × {participantCount} =
-            <span className="text-red-500 ml-2">₹{totalAmount}</span>
+            <span className="text-red-500 ml-2">
+              ₹{totalAmount}
+            </span>
           </p>
 
-          <a href={event.qrLink} target="_blank" rel="noreferrer" className="block text-red-500 underline mb-4">
+          <a
+            href={event.qrLink}
+            target="_blank"
+            rel="noreferrer"
+            className="block text-red-500 underline mb-4"
+          >
             Open Payment QR
           </a>
 
-          <a href={formLink} target="_blank" rel="noreferrer"
-            className="block text-center py-3 border border-red-600 text-red-500 hover:bg-red-600 hover:text-black">
+          <a
+            href={formLink}
+            target="_blank"
+            rel="noreferrer"
+            className="block text-center py-3 border border-red-600 text-red-500 hover:bg-red-600 hover:text-black rounded-md"
+          >
             Upload Payment Screenshot
           </a>
         </div>
@@ -273,7 +301,7 @@ function Register() {
         <button
           disabled={submitting}
           onClick={submitForm}
-          className="w-full mt-10 py-4 border border-red-600 text-red-500 tracking-[0.3em] hover:bg-red-600 hover:text-black disabled:opacity-50"
+          className="w-full mt-10 py-4 border border-red-600 text-red-500 tracking-widest hover:bg-red-600 hover:text-black rounded-md disabled:opacity-50"
         >
           CONFIRM REGISTRATION
         </button>

@@ -46,7 +46,7 @@ function AppWrapper() {
       {/* PAGE CONTENT */}
       <main
         key={location.pathname}
-        className="pt-24 min-h-screen relative z-10 animate-fadeIn"
+        className="pt-20 md:pt-24 min-h-screen relative z-10"
       >
         <Routes>
           <Route path="/" element={<Home />} />
