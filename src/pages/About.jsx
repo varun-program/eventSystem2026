@@ -22,7 +22,7 @@ function About() {
 
       {/* HERO */}
       <div className="text-center mb-24">
-        <h1 className="glitch-text text-5xl md:text-6xl tracking-[0.4em]" data-text="BLITZMAC'26">
+        <h1 className="glitch-text text-5xl md:text-6xl tracking-[0.4em]">
           BLITZMAC&apos;26
         </h1>
         <p className="mt-6 text-gray-400 tracking-widest">Technical Symposium</p>
@@ -54,50 +54,23 @@ function About() {
 
           {/* HOD */}
           <div className="bg-black/80 border border-red-700 rounded-xl p-8 text-center hover:shadow-[0_0_40px_red] transition">
-            <div className="
-              relative w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden
-              border-2 border-red-600
-              shadow-[0_0_30px_rgba(229,9,20,0.9)]
-            ">
-              <img
-                src="/hod.jpg"
-                alt="HOD"
-                className="
-                  w-full h-full object-cover
-                  brightness-110 contrast-110
-                  transition duration-500
-                  hover:scale-105
-                "
-              />
+            <div className="relative w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-2 border-red-600 shadow-[0_0_30px_rgba(229,9,20,0.9)]">
+              <img src="/hod.jpg" alt="HOD" className="w-full h-full object-cover hover:scale-105 transition" />
             </div>
             <h3 className="text-red-400 tracking-widest text-lg">Dr. S. Rinesh</h3>
             <p className="text-gray-400 text-sm mt-2">Professor & Head of Department</p>
             <p className="text-gray-500 text-sm">IT & AIML Department</p>
           </div>
 
-          {/* MAIN STAFF COORDINATOR */}
+          {/* MAIN COORDINATOR */}
           <div className="bg-black/80 border border-red-700 rounded-xl p-8 text-center hover:shadow-[0_0_40px_red] transition">
-            <div className="
-              relative w-36 h-36 mx-auto mb-6 rounded-full overflow-hidden
-              border-2 border-red-600
-              shadow-[0_0_30px_rgba(229,9,20,0.9)]
-            ">
-              <img
-                src="/main-coordinator.png"
-                alt="Main Coordinator"
-                className="
-                  w-full h-full object-cover
-                  brightness-110 contrast-110
-                  transition duration-500
-                  hover:scale-105
-                "
-              />
+            <div className="relative w-36 h-36 mx-auto mb-6 rounded-full overflow-hidden border-2 border-red-600 shadow-[0_0_30px_rgba(229,9,20,0.9)]">
+              <img src="/main-coordinator.png" alt="Coordinator" className="w-full h-full object-cover hover:scale-105 transition" />
             </div>
             <h3 className="text-red-400 tracking-widest text-lg">S. Prabhu</h3>
             <p className="text-gray-400 text-sm mt-2">Main Staff Coordinator</p>
             <p className="text-gray-500 text-sm mt-2">📞 9600406977</p>
           </div>
-
         </div>
       </div>
 
@@ -121,19 +94,11 @@ function About() {
                 </button>
 
                 {isOpen && (
-                  <div className="px-6 pb-6 animate-fadeIn">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm mt-4">
-                      <div>
-                        <p className="text-gray-400">Staff Coordinator</p>
-                        <p className="text-red-400">{e.staff}</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-400">Student Coordinator</p>
-                        <p className="text-red-400">
-                          {e.student} – 📞 {e.studentPhone}
-                        </p>
-                      </div>
-                    </div>
+                  <div className="px-6 pb-6">
+                    <p className="text-gray-400 text-sm mt-4">Staff: <span className="text-red-400">{e.staff}</span></p>
+                    <p className="text-gray-400 text-sm mt-2">
+                      Student: <span className="text-red-400">{e.student} – 📞 {e.studentPhone}</span>
+                    </p>
                   </div>
                 )}
               </div>
@@ -143,7 +108,7 @@ function About() {
       </div>
 
       {/* PAYMENT QUERIES */}
-      <div className="mb-20">
+      <div className="mb-24">
         <h2 className="text-red-500 text-3xl tracking-[0.3em] mb-14 text-center glow-text">
           PAYMENT QUERIES
         </h2>
@@ -153,14 +118,50 @@ function About() {
             { name: "Siva Kumar", phone: "+91 7871581868" },
             { name: "Yoghesh", phone: "+91 6384766889" },
           ].map((p, i) => (
-            <div
-              key={i}
-              className="bg-black/80 border border-red-700 rounded-xl p-6 text-center hover:shadow-[0_0_25px_red]"
-            >
+            <div key={i} className="bg-black/80 border border-red-700 rounded-xl p-6 text-center hover:shadow-[0_0_25px_red]">
               <h4 className="text-red-400 tracking-widest">{p.name}</h4>
               <p className="text-gray-400 mt-2">📞 {p.phone}</p>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* CONNECT WITH US */}
+      <div className="mb-24">
+        <h2 className="text-red-500 text-3xl tracking-[0.3em] mb-14 text-center glow-text">
+          CONNECT WITH US
+        </h2>
+
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-10">
+
+          <a
+            href="https://www.instagram.com/blitzmac_vsb?igsh=eWY2MHM4bXg1MTd1"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-4 bg-black/80 border border-red-700 px-8 py-5 rounded-xl hover:shadow-[0_0_35px_red] transition"
+          >
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/174/174855.png"
+              alt="Instagram"
+              className="w-8 h-8"
+            />
+            <span className="text-red-400 tracking-widest text-sm">Instagram</span>
+          </a>
+
+          <a
+            href="https://chat.whatsapp.com/L0l2g2IPUFdDVSNomf3n86?mode=gi_t"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-4 bg-black/80 border border-green-600 px-8 py-5 rounded-xl hover:shadow-[0_0_35px_rgba(37,211,102,0.8)] transition"
+          >
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
+              alt="WhatsApp"
+              className="w-8 h-8"
+            />
+            <span className="text-green-400 tracking-widest text-sm">WhatsApp Community</span>
+          </a>
+
         </div>
       </div>
 
@@ -172,7 +173,7 @@ function About() {
         <a
           href="/BLITZMAC26_INVITATION.pdf"
           download
-          className="inline-block px-10 py-4 border border-red-600 text-red-400 tracking-widest rounded-full hover:bg-red-600 hover:text-black transition-all duration-300 shadow-[0_0_20px_red]"
+          className="inline-block px-10 py-4 border border-red-600 text-red-400 tracking-widest rounded-full hover:bg-red-600 hover:text-black transition shadow-[0_0_20px_red]"
         >
           ⬇ DOWNLOAD INVITATION
         </a>
