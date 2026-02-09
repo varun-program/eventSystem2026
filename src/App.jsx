@@ -12,6 +12,8 @@ import AdminRegistrations from "./pages/AdminRegistrations";
 import PageLoader from "./components/PageLoader";
 import CinematicBackground from "./components/CinematicBackground";
 import Developers from "./pages/Developers";
+import FloatingSocials from "./components/FloatingSocials";
+
 
 
 
@@ -42,6 +44,7 @@ function AppWrapper() {
 
       {/* NAVBAR (always on top) */}
       <Navbar />
+      <FloatingSocials />
 
       {/* PAGE CONTENT */}
       <main
