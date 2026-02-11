@@ -10,7 +10,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 
-const MAX_TEAM_SIZE = 3; // leader + 2 members
+const MAX_TEAM_SIZE = 3;
 
 function Register() {
   const location = useLocation();
@@ -25,57 +25,32 @@ function Register() {
     );
   }
 
-  /* ================= BASIC ================= */
+  /* ================= STATES ================= */
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [college, setCollege] = useState("");
   const [department, setDepartment] = useState("");
   const [phone, setPhone] = useState("");
 
-  /* ================= STUDENT TYPE ================= */
   const [studentType, setStudentType] = useState("");
   const isVSBStudent = studentType === "vsb";
   const feePerPerson = isVSBStudent ? 150 : 300;
 
-  /* ================= TEAM ================= */
   const [teamName, setTeamName] = useState("");
   const [members, setMembers] = useState([]);
 
-  const participantCount =
-    event.type === "team" ? members.length + 1 : 1;
-
-  const canAddMember = members.length < 2;
-
-  const addMember = () => {
-    if (canAddMember) {
-      setMembers([...members, ""]);
-    }
-  };
-
-  const removeMember = (index) => {
-    const updated = members.filter((_, i) => i !== index);
-    setMembers(updated);
-  };
-
-  const totalAmount = feePerPerson * participantCount;
-
-  /* ================= NON-TECH ================= */
   const [nonTechEvents, setNonTechEvents] = useState([]);
   const [selectedNonTech, setSelectedNonTech] = useState("");
 
   const [submitting, setSubmitting] = useState(false);
+  const [showFormModal, setShowFormModal] = useState(false);
 
-  /* ================= GOOGLE FORM ================= */
-  const googleFormBase =
-    "https://docs.google.com/forms/d/e/1FAIpQLSe9UE9pCjojdIvaSMoNOQy407K_tiqa6FFu2_-VUV1N_iFMNg/viewform";
+  const participantCount =
+    event.type === "team" ? members.length + 1 : 1;
 
-  const formLink =
-    `${googleFormBase}?` +
-    `entry.1041746971=${encodeURIComponent(name)}` +
-    `&entry.1291792597=${encodeURIComponent(event.title)}` +
-    `&entry.1362286974=${encodeURIComponent(phone)}`;
+  const totalAmount = feePerPerson * participantCount;
 
-  /* ================= FETCH NON-TECH ================= */
+  /* ================= FETCH NON TECH ================= */
   useEffect(() => {
     const fetchNonTech = async () => {
       const q = query(
@@ -88,6 +63,15 @@ function Register() {
     fetchNonTech();
   }, []);
 
+  /* ================= TEAM FUNCTIONS ================= */
+  const addMember = () => {
+    if (members.length < 2) setMembers([...members, ""]);
+  };
+
+  const removeMember = (index) => {
+    setMembers(members.filter((_, i) => i !== index));
+  };
+
   /* ================= DUPLICATE CHECK ================= */
   const checkDuplicate = async () => {
     const q = query(
@@ -99,7 +83,7 @@ function Register() {
     return !snap.empty;
   };
 
-  /* ================= SUBMIT ================= */
+  /* ================= CONFIRM REGISTER ================= */
   const submitForm = async () => {
     if (!name || !email || !college || !department || !phone || !studentType) {
       alert("Please fill all required fields");
@@ -112,7 +96,7 @@ function Register() {
     }
 
     if (participantCount > MAX_TEAM_SIZE) {
-      alert("Maximum team size is 3 (1 leader + 2 members)");
+      alert("Maximum 3 members allowed");
       return;
     }
 
@@ -138,9 +122,7 @@ function Register() {
         teamName: event.type === "team" ? teamName : null,
         participants: [
           { name, role: "Leader" },
-          ...members
-            .filter(m => m.trim() !== "")
-            .map(m => ({ name: m, role: "Member" })),
+          ...members.map(m => ({ name: m, role: "Member" })),
         ],
         participantCount,
         feePerPerson,
@@ -149,9 +131,8 @@ function Register() {
         createdAt: new Date(),
       });
 
-      alert("Registration successful! Now upload payment screenshot.");
-      window.open(formLink, "_blank");
-      navigate("/events");
+      // ✅ Instead of new tab — open modal
+      setShowFormModal(true);
 
     } catch (err) {
       console.error(err);
@@ -161,33 +142,35 @@ function Register() {
     }
   };
 
-  return (
-    <section className="min-h-screen px-4 sm:px-6 py-24 flex justify-center">
-      <div className="w-full max-w-2xl bg-black/80 border border-red-700 rounded-xl p-6 sm:p-10">
+  const googleFormLink =
+    "https://docs.google.com/forms/d/e/1FAIpQLSe9UE9pCjojdIvaSMoNOQy407K_tiqa6FFu2_-VUV1N_iFMNg/viewform";
 
-        <h1 className="text-red-600 text-2xl sm:text-3xl tracking-widest text-center mb-6">
+  return (
+    <section className="min-h-screen px-4 py-24 flex justify-center">
+      <div className="w-full max-w-2xl bg-black/80 border border-red-700 rounded-xl p-8 shadow-xl">
+
+        <h1 className="text-red-600 text-2xl text-center mb-8 tracking-widest">
           {event.title}
         </h1>
 
-        {/* BASIC FORM */}
+        {/* BASIC */}
         <div className="space-y-4">
-          {[
-            ["Student Name", setName],
+          {[["Student Name", setName],
             ["Email", setEmail],
             ["College", setCollege],
             ["Department", setDepartment],
-            ["Phone", setPhone],
+            ["Phone", setPhone]
           ].map(([ph, setter], i) => (
             <input
               key={i}
-              className="w-full p-3 rounded-md bg-black border border-red-600 text-white"
+              className="w-full p-3 bg-black border border-red-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-red-600"
               placeholder={ph}
               onChange={e => setter(e.target.value)}
             />
           ))}
 
           <select
-            className="w-full p-3 rounded-md bg-black border border-red-600 text-white"
+            className="w-full p-3 bg-black border border-red-600 rounded-md text-white"
             value={studentType}
             onChange={e => setStudentType(e.target.value)}
           >
@@ -197,28 +180,37 @@ function Register() {
           </select>
         </div>
 
-        {/* TEAM SECTION */}
+        {/* NON TECH */}
+        <div className="mt-8">
+          <h3 className="text-red-500 mb-3">Select One Non-Technical Event</h3>
+          {nonTechEvents.map(e => (
+            <label key={e.id} className="block text-gray-300 mb-2">
+              <input
+                type="radio"
+                className="mr-2"
+                checked={selectedNonTech === e.title}
+                onChange={() => setSelectedNonTech(e.title)}
+              />
+              {e.title}
+            </label>
+          ))}
+        </div>
+
+        {/* TEAM */}
         {event.type === "team" && (
           <div className="mt-8">
-            <h3 className="text-red-500 tracking-widest mb-2">
-              TEAM DETAILS
-            </h3>
-            <p className="text-gray-400 text-xs mb-4">
-              Max 3 members (1 leader + 2 members)
-            </p>
-
             <input
-              className="w-full p-3 mb-3 rounded-md bg-black border border-red-600 text-white"
+              className="w-full p-3 mb-3 bg-black border border-red-600 rounded-md text-white"
               placeholder="Team Name"
               onChange={e => setTeamName(e.target.value)}
             />
 
-            {members.map((member, i) => (
+            {members.map((m, i) => (
               <div key={i} className="flex gap-2 mb-2">
                 <input
-                  className="flex-1 p-3 rounded-md bg-black border border-red-600 text-white"
-                  placeholder={`Member ${i + 2} Name`}
-                  value={member}
+                  className="flex-1 p-3 bg-black border border-red-600 rounded-md text-white"
+                  value={m}
+                  placeholder={`Member ${i + 2}`}
                   onChange={e => {
                     const copy = [...members];
                     copy[i] = e.target.value;
@@ -226,9 +218,8 @@ function Register() {
                   }}
                 />
                 <button
-                  type="button"
                   onClick={() => removeMember(i)}
-                  className="px-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+                  className="px-3 bg-red-600 text-white rounded-md"
                 >
                   −
                 </button>
@@ -236,63 +227,64 @@ function Register() {
             ))}
 
             <button
-              type="button"
-              disabled={!canAddMember}
               onClick={addMember}
-              className={`text-sm underline ${
-                canAddMember
-                  ? "text-red-500"
-                  : "text-gray-500 cursor-not-allowed"
-              }`}
+              disabled={members.length >= 2}
+              className="text-red-500 underline text-sm"
             >
-              + Add Team Member
+              + Add Member
             </button>
           </div>
         )}
 
-        {/* PAYMENT SECTION */}
-        <div className="mt-10 border-t border-red-700 pt-6 text-center">
-
-          <h3 className="text-red-500 tracking-widest mb-4">
-            SCAN TO PAY
-          </h3>
-
-          <p className="text-gray-300 mb-3">
+        {/* PAYMENT DISPLAY */}
+        <div className="mt-10 text-center border-t border-red-700 pt-6">
+          <p>
             ₹{feePerPerson} × {participantCount} =
-            <span className="text-red-500 ml-2 font-semibold text-lg">
+            <span className="text-red-500 ml-2 font-semibold">
               ₹{totalAmount}
             </span>
           </p>
 
-          <div className="bg-black/70 border border-red-700 rounded-xl p-5 inline-block shadow-[0_0_30px_rgba(229,9,20,0.4)]">
-            <img
-              src="/payment-qr.jpg"
-              alt="Payment QR"
-              className="w-48 h-48 object-contain mx-auto"
-            />
-            <p className="text-xs text-gray-400 mt-3">
-              Scan this QR to complete your payment
-            </p>
-          </div>
-
-          <a
-            href={formLink}
-            target="_blank"
-            rel="noreferrer"
-            className="block mt-6 py-3 border border-red-600 text-red-500 hover:bg-red-600 hover:text-black rounded-md transition"
-          >
-            Upload Payment Screenshot
-          </a>
+          <img
+            src="/payment-qr.jpg"
+            alt="QR"
+            className="w-40 mx-auto my-4 rounded-lg shadow-lg"
+          />
         </div>
 
+        {/* CONFIRM */}
         <button
           disabled={submitting}
           onClick={submitForm}
-          className="w-full mt-10 py-4 border border-red-600 text-red-500 tracking-widest hover:bg-red-600 hover:text-black rounded-md disabled:opacity-50"
+          className="w-full mt-8 py-3 border border-red-600 text-red-500 rounded-md hover:bg-red-600 hover:text-black transition"
         >
-          CONFIRM REGISTRATION
+          Confirm Registration
         </button>
       </div>
+
+      {/* GOOGLE FORM MODAL */}
+      {showFormModal && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+          <div className="bg-black border border-red-600 w-[95%] md:w-[800px] h-[90vh] rounded-xl relative">
+
+            <iframe
+              src={googleFormLink}
+              title="Payment Upload"
+              className="w-full h-full rounded-xl"
+            />
+
+            <button
+              onClick={() => {
+                setShowFormModal(false);
+                navigate("/events");
+              }}
+              className="absolute top-3 right-3 bg-red-600 px-4 py-1 rounded text-white"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
