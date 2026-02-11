@@ -22,8 +22,12 @@ function Events() {
 
       if (!mounted) return;
 
-      setTechnicalEvents(allEvents.filter(e => e.category === "technical"));
-      setNonTechnicalEvents(allEvents.filter(e => e.category === "non-technical"));
+      setTechnicalEvents(
+        allEvents.filter((e) => e.category === "technical")
+      );
+      setNonTechnicalEvents(
+        allEvents.filter((e) => e.category === "non-technical")
+      );
       setLoading(false);
     };
 
@@ -36,7 +40,12 @@ function Events() {
   /* ================= TECHNICAL CARD ================= */
   const TechnicalCard = ({ event }) => {
     const hasPrize =
-      typeof event.prizeAmount === "number" && event.prizeAmount > 0;
+      typeof event.prizeAmount === "number" &&
+      event.prizeAmount > 0;
+
+    const isWorkshop = !hasPrize;
+    const isCodeRelay =
+      event.title?.toLowerCase().includes("code relay");
 
     return (
       <div
@@ -56,6 +65,24 @@ function Events() {
           {event.description}
         </p>
 
+        {/* IMPORTANT RULES */}
+        <div className="mb-4 flex flex-wrap gap-2">
+
+          {/* Laptop only for competitions */}
+          {!isWorkshop && (
+            <div className="text-xs px-3 py-1 rounded-full border border-yellow-500 text-yellow-400">
+              ⚠ Laptop Compulsory
+            </div>
+          )}
+
+          {/* Code Relay rule */}
+          {isCodeRelay && (
+            <div className="text-xs px-3 py-1 rounded-full border border-red-500 text-red-400">
+              👥 Exactly 3 Members
+            </div>
+          )}
+        </div>
+
         {hasPrize ? (
           <p className="text-yellow-400 font-semibold mb-4 text-sm">
             🏆 Prize Pool: ₹{event.prizeAmount}
@@ -67,7 +94,9 @@ function Events() {
         )}
 
         <button
-          onClick={() => navigate("/register", { state: { event } })}
+          onClick={() =>
+            navigate("/register", { state: { event } })
+          }
           className="
             w-full py-2.5
             border border-red-600
@@ -83,7 +112,7 @@ function Events() {
     );
   };
 
-  /* ================= NON-TECH CARD (FIXED) ================= */
+  /* ================= NON-TECH CARD ================= */
   const NonTechnicalCard = ({ event }) => (
     <div
       className="
@@ -96,7 +125,6 @@ function Events() {
         group
       "
     >
-      {/* TOP NEON STRIP */}
       <div
         className="
           absolute top-0 left-0 w-full h-[2px]
@@ -126,7 +154,6 @@ function Events() {
         {event.description}
       </p>
 
-      {/* INNER GLOW */}
       <div
         className="
           absolute inset-0 pointer-events-none
@@ -140,6 +167,7 @@ function Events() {
 
   return (
     <section className="min-h-screen px-5 md:px-16 py-20 md:py-24">
+
       {/* HEADER */}
       <div className="text-center mb-16 md:mb-24">
         <h1 className="text-3xl md:text-5xl text-red-600 tracking-[0.15em] md:tracking-[0.3em] glow-text mb-4">
@@ -157,7 +185,7 @@ function Events() {
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
-          {technicalEvents.map(event => (
+          {technicalEvents.map((event) => (
             <TechnicalCard key={event.id} event={event} />
           ))}
         </div>
@@ -170,11 +198,12 @@ function Events() {
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
-          {nonTechnicalEvents.map(event => (
+          {nonTechnicalEvents.map((event) => (
             <NonTechnicalCard key={event.id} event={event} />
           ))}
         </div>
       </div>
+
     </section>
   );
 }
