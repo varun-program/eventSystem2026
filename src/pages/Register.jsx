@@ -53,19 +53,27 @@ function Register() {
   /* ================= FETCH NON TECH ================= */
   useEffect(() => {
     const fetchNonTech = async () => {
-      const q = query(
-        collection(db, "events"),
-        where("category", "==", "non-technical")
-      );
-      const snap = await getDocs(q);
-      setNonTechEvents(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      try {
+        const q = query(
+          collection(db, "events"),
+          where("category", "==", "non-technical")
+        );
+        const snap = await getDocs(q);
+        setNonTechEvents(
+          snap.docs.map(d => ({ id: d.id, ...d.data() }))
+        );
+      } catch (err) {
+        console.error("Non-tech fetch error:", err);
+      }
     };
     fetchNonTech();
   }, []);
 
   /* ================= TEAM FUNCTIONS ================= */
   const addMember = () => {
-    if (members.length < 2) setMembers([...members, ""]);
+    if (members.length < 2) {
+      setMembers([...members, ""]);
+    }
   };
 
   const removeMember = (index) => {
@@ -103,8 +111,10 @@ function Register() {
     try {
       setSubmitting(true);
 
-      if (await checkDuplicate()) {
+      const duplicate = await checkDuplicate();
+      if (duplicate) {
         alert("This email is already registered");
+        setSubmitting(false);
         return;
       }
 
@@ -122,7 +132,9 @@ function Register() {
         teamName: event.type === "team" ? teamName : null,
         participants: [
           { name, role: "Leader" },
-          ...members.map(m => ({ name: m, role: "Member" })),
+          ...members
+            .filter(m => m.trim() !== "")
+            .map(m => ({ name: m, role: "Member" })),
         ],
         participantCount,
         feePerPerson,
@@ -131,12 +143,12 @@ function Register() {
         createdAt: new Date(),
       });
 
-      // ✅ Instead of new tab — open modal
+      // Open Google Form Modal
       setShowFormModal(true);
 
     } catch (err) {
-      console.error(err);
-      alert("Something went wrong");
+      console.error("Firestore error:", err);
+      alert(err.message || "Registration failed");
     } finally {
       setSubmitting(false);
     }
@@ -218,6 +230,7 @@ function Register() {
                   }}
                 />
                 <button
+                  type="button"
                   onClick={() => removeMember(i)}
                   className="px-3 bg-red-600 text-white rounded-md"
                 >
@@ -227,6 +240,7 @@ function Register() {
             ))}
 
             <button
+              type="button"
               onClick={addMember}
               disabled={members.length >= 2}
               className="text-red-500 underline text-sm"
@@ -236,7 +250,7 @@ function Register() {
           </div>
         )}
 
-        {/* PAYMENT DISPLAY */}
+        {/* PAYMENT */}
         <div className="mt-10 text-center border-t border-red-700 pt-6">
           <p>
             ₹{feePerPerson} × {participantCount} =
@@ -252,13 +266,12 @@ function Register() {
           />
         </div>
 
-        {/* CONFIRM */}
         <button
           disabled={submitting}
           onClick={submitForm}
-          className="w-full mt-8 py-3 border border-red-600 text-red-500 rounded-md hover:bg-red-600 hover:text-black transition"
+          className="w-full mt-8 py-3 border border-red-600 text-red-500 rounded-md hover:bg-red-600 hover:text-black transition disabled:opacity-50"
         >
-          Confirm Registration
+          {submitting ? "Processing..." : "Confirm Registration"}
         </button>
       </div>
 
