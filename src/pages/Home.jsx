@@ -5,7 +5,7 @@ function Home() {
   const navigate = useNavigate();
 
   /* ================= COUNTDOWN ================= */
-  const eventDate = new Date("2026-02-19T09:00:00"); // Feb 19, 9 AM
+  const eventDate = new Date("2026-02-18T09:00:00"); // Feb 19, 9 AM
   const [timeLeft, setTimeLeft] = useState({});
 
   useEffect(() => {
@@ -111,7 +111,7 @@ function Home() {
             </div>
 
             <p className="mt-4 text-xs tracking-widest text-yellow-400">
-              📅 FEBRUARY 19, 2026
+              📅 FEBRUARY 18, 2026
             </p>
           </div>
         )}
