@@ -10,6 +10,9 @@ function Events() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // 🔴 CHANGE THIS TO false WHEN YOU WANT TO OPEN REGISTRATION
+  const registrationsClosed = true;
+
   useEffect(() => {
     let mounted = true;
 
@@ -67,18 +70,15 @@ function Events() {
 
         {/* IMPORTANT RULES */}
         <div className="mb-4 flex flex-wrap gap-2">
-
-          {/* Laptop only for competitions */}
           {!isWorkshop && (
             <div className="text-xs px-3 py-1 rounded-full border border-yellow-500 text-yellow-400">
               ⚠ Laptop Compulsory
             </div>
           )}
 
-          {/* Code Relay rule */}
           {isCodeRelay && (
             <div className="text-xs px-3 py-1 rounded-full border border-red-500 text-red-400">
-              👥 Exactly 3 Members
+              👥 Exactly 3 Members Required
             </div>
           )}
         </div>
@@ -93,21 +93,37 @@ function Events() {
           </span>
         )}
 
-        <button
-          onClick={() =>
-            navigate("/register", { state: { event } })
-          }
-          className="
-            w-full py-2.5
-            border border-red-600
-            text-red-500 text-sm
-            tracking-wide md:tracking-widest
-            md:hover:bg-red-600 md:hover:text-black
-            transition
-          "
-        >
-          REGISTER
-        </button>
+        {/* 🔒 REGISTRATION BUTTON */}
+        {registrationsClosed ? (
+          <button
+            disabled
+            className="
+              w-full py-2.5
+              border border-gray-600
+              text-gray-500 text-sm
+              tracking-wide md:tracking-widest
+              cursor-not-allowed
+            "
+          >
+            REGISTRATIONS CLOSED
+          </button>
+        ) : (
+          <button
+            onClick={() =>
+              navigate("/register", { state: { event } })
+            }
+            className="
+              w-full py-2.5
+              border border-red-600
+              text-red-500 text-sm
+              tracking-wide md:tracking-widest
+              md:hover:bg-red-600 md:hover:text-black
+              transition
+            "
+          >
+            REGISTER
+          </button>
+        )}
       </div>
     );
   };
